@@ -1,20 +1,35 @@
 import React from 'react'
-import { View } from 'react-native'
-import { Router, Scene } from 'react-native-router-flux'
+import { View, Text } from 'react-native'
+import { Router, Scene, Switch, Actions, ActionConst } from 'react-native-router-flux'
+import Button from 'react-native-button'
+import { connect } from 'react-redux'
 import {
   Home,
   Signin,
   Signup
 } from '../components'
 
+const RouterWithRedux = connect()(Router)
+
 export default function Routes() {
   return (
-    <Router>
-      <Scene key="root">
-        <Scene key="home" title="Home" component={Home} initial={true} hideNavBar={true} />
-        <Scene key="signin" title="Signin" component={Signin} />
-        <Scene key="signup" title="Signup" component={Signup} />
+    <RouterWithRedux>
+      <Scene key="root" hideNavBar>
+        <Scene
+          key="switcher"
+          component={connect(state => ({isAuthed: state.account.isAuthed}))(Switch)}
+          selector={(props) => props.isAuthed ? 'authed' : 'authentication'}
+          tabs={true}
+        >
+          <Scene key="authentication">
+            <Scene key="signin" title="Signin" component={Signin} hideNavBar={false} />
+            <Scene key="signup" title="Signup" component={Signup} hideNavBar={false} />
+          </Scene>
+          <Scene key="authed">
+            <Scene key="home" title="Home" component={Home} />
+          </Scene>
+        </Scene>
       </Scene>
-    </Router>
+    </RouterWithRedux>
   )
 }
