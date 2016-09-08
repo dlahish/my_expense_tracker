@@ -8,7 +8,11 @@ import Signup from './Signup'
 import TabIcon from './TabIcon'
 import TabView from './TabView'
 import NewTransaction from './NewTransaction'
-import ShowDetails from './ShowDetails'
+import CurrentMonthTotal from './CurrentMonthTotal'
+import HomeToolbar from './HomeToolbar'
+import addBorder from './addBorder'
+import FavoriteTransactions from './FavoriteTransactions'
+import FavoriteTransaction from './FavoriteTransaction'
 
 export {
   Home,
@@ -21,5 +25,9 @@ export {
   TabIcon,
   TabView,
   NewTransaction,
-  ShowDetails
+  CurrentMonthTotal,
+  HomeToolbar,
+  addBorder,
+  FavoriteTransactions,
+  FavoriteTransaction
 }

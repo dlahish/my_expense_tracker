@@ -2,51 +2,48 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { GuestActions, UserActions, NewTransaction, ShowDetails } from '../components'
+import {
+  GuestActions,
+  UserActions,
+  NewTransaction,
+  CurrentMonthTotal,
+  HomeToolbar,
+  addBorder,
+  FavoriteTransactions
+} from '../components'
 import * as accountActions from '../actions/accounts'
 import * as dataActions from '../actions/data'
 import Chart from 'react-native-chart'
 
-function getMonth() {
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-                      "July", "August", "September", "October", "November", "December"];
-  const d = new Date();
-  return monthNames[d.getMonth()]
-}
+const incomeFavoriteTransactions = [
+  {name: 'Night', date: '09/10/2016', category: 'Madame', amount: 100, notes: ''},
+  {name: 'Day', date: '09/11/2016', category: 'Madame', amount: 120, notes: ''},
+  {name: 'Tip', date: '09/12/2016', category: 'Madame', amount: 28, notes: ''}
+]
 
-function getMonthBalance(yearTotal) {
-  console.log('getMonthBalance')
-  console.log(yearTotal)
-  const month = new Date().getMonth()
-  if (yearTotal.length === 0) return {}
-  else return yearTotal[month]
-}
+const expeseFavoriteTransactions = [
+  {name: 'Beer', date: '09/01/2016', category: 'Food', amount: 7, notes: ''},
+  {name: 'Coffee', date: '09/05/2016', category: 'Food', amount: 5, notes: ''},
+  {name: 'Train Ticket', date: '09/02/2016', category: 'General', amount: 70, notes: ''}
+]
 
 class Home extends Component {
-  // componentWillMount() {
-  //   let currentYear = new Date().getFullYear()
-  //   console.log(currentYear)
-  //   this.props.actions.data.getYearTotal(currentYear)
-  // }
-  componentWillReceiveProps() {
-    let currentYear = new Date().getFullYear()
-    console.log(currentYear)
-    this.props.actions.data.getYearTotal(currentYear)
-  }
-
   render() {
-    const monthBalance = getMonthBalance(this.props.yearTotal)
     return (
       <View style={styles.container}>
         <View style={styles.toolbar}>
-          <Text style={styles.monthTitle}>{getMonth()}</Text>
+          <HomeToolbar />
         </View>
         <View style={styles.content}>
-          <View style={styles.details}>
-            <ShowDetails monthBalance={monthBalance} />
+          <View style={styles.main}>
+            <CurrentMonthTotal getYearTotal={this.props.actions.data.getYearTotal} currentMonthTotal={this.props.currentMonthTotal}/>
+            <FavoriteTransactions
+              onAddTransaction={this.props.actions.data.addNewTransaction}
+              incomeFavoriteTransactions={incomeFavoriteTransactions}
+              expeseFavoriteTransactions={expeseFavoriteTransactions}/>
           </View>
           <View style={styles.actions}>
-            <NewTransaction />
+            <NewTransaction getYearTotal={this.props.actions.data.getYearTotal} />
             <UserActions handleLogout={this.props.actions.account.logoutAndUnauthUser} />
           </View>
         </View>
@@ -60,9 +57,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
-		backgroundColor: '#f2f2f2'
+		// backgroundColor: '#f2f2f2'
+    backgroundColor: '#FFF'
 	},
-  details: {
+  main: {
     flex: 1
   },
   actions: {
@@ -76,25 +74,23 @@ const styles = StyleSheet.create({
     paddingBottom:10,
     backgroundColor: 'rgb(0, 153, 204)'
   },
-  monthTitle: {
-    fontSize: 18,
-    textAlign:'center',
-    fontWeight: '300',
-    color:'#fff',
-  },
   content: {
     flex: 9,
     justifyContent: 'flex-end',
     alignItems: 'stretch',
-    backgroundColor: '#f2f2f2',
+    // backgroundColor: '#f2f2f2',
+    paddingTop: 5,
     paddingBottom: 60
+  },
+  favoriteTransactions: {
+    flex: 1
   }
 })
 
 export default connect(
   (state) => ({
     isAuthed: state.account.isAuthed,
-    yearTotal: state.data.yearTotal
+    currentMonthTotal: state.data.currentMonthTotal
   }),
   (dispatch) => ({
     actions: {
