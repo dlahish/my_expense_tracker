@@ -9,7 +9,6 @@ import TabIcon from './TabIcon'
 import TabView from './TabView'
 import NewTransaction from './NewTransaction'
 import CurrentMonthTotal from './CurrentMonthTotal'
-import HomeToolbar from './HomeToolbar'
 import addBorder from './addBorder'
 import FavoriteTransactions from './FavoriteTransactions'
 import FavoriteTransaction from './FavoriteTransaction'
@@ -19,6 +18,7 @@ import Button from './common/Button'
 import DatePicker from './common/DatePicker'
 import DatePickerModal from './DatePickerModal'
 import CategoryList from './CategoryList'
+import NewTransactionNavBar from './NewTransactionNavBar'
 
 export {
   Home,
@@ -32,7 +32,6 @@ export {
   TabView,
   NewTransaction,
   CurrentMonthTotal,
-  HomeToolbar,
   addBorder,
   FavoriteTransactions,
   FavoriteTransaction,
@@ -41,5 +40,6 @@ export {
   Button,
   DatePicker,
   DatePickerModal,
-  CategoryList
+  CategoryList,
+  NewTransactionNavBar
 }
