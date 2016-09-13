@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View, StyleSheet, TouchableHighlight } from 'react-native'
-import { addBorder } from '../components'
+import { addBorder } from '../../components'
 
 export default NewTransactionNavBar = (props) =>
   <View style={styles.container}>
     <TouchableHighlight
       style={styles.button}
-      onPress={() => props.onPress()}
+      onPress={() => props.onCancelPress()}
     >
       <Text style={styles.buttonText}>
         Cancel
@@ -17,7 +17,7 @@ export default NewTransactionNavBar = (props) =>
     </View>
     <TouchableHighlight
         style={styles.button}
-        onPress={() => props.onPress()}
+        onPress={() => props.onSaveNewTransaction ()}
       >
         <Text style={styles.buttonText}>
           Save
