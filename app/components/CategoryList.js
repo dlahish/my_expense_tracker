@@ -11,15 +11,12 @@ import {
   TouchableOpacity,
   Image,
   Keyboard,
-  LayoutAnimation,
   Dimensions,
   StyleSheet
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 const myIcon = (<Icon name="ios-add-circle" size={26} />)
-
-const categories = ['General', 'Coffee', 'Beer/Wine', 'Eating Out', 'Grocery', 'Shopping']
 
 import { addBorder } from '../components'
 
@@ -30,7 +27,7 @@ const CategoryRow = (props) => {
         {myIcon}
         <View style={styles.categoryWrapper}>
           <Text style={styles.category}>
-            {props.category}
+            {props.category.name}
           </Text>
         </View>
       </View>
@@ -40,13 +37,13 @@ const CategoryRow = (props) => {
 
 class CategoryList extends Component {
   renderCategories(categories) {
-    return categories.map((category,i) =>
+    let filteredCategories = categories.filter((category) => category.type === this.props.categoryType)
+    return filteredCategories.map((category,i) =>
       <CategoryRow onCategorySelect={() => this.handleCategoryPress(category)} category={category} key={i}/>)
   }
 
   handleCategoryPress(category) {
-    console.log(category)
-    this.props.setNewCategory(category)
+    this.props.setNewCategory(category.name)
     Actions.pop()
   }
 
@@ -54,7 +51,7 @@ class CategoryList extends Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          {this.renderCategories(categories)}
+          {this.renderCategories(this.props.categories)}
         </View>
       </ScrollView>
     )
@@ -84,7 +81,11 @@ const styles = StyleSheet.create({
   }
 })
 
+CategoryList.propTypes = {
+  categories: PropTypes.array
+}
+
 export default connect(
-	(state) => ({}),
+	(state) => ({ categories: state.data.categories }),
 	(dispatch) => (bindActionCreators(formActionCreators, dispatch))
 )(CategoryList)

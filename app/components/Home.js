@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Actions } from 'react-native-router-flux'
 import {
   GuestActions,
   UserActions,
@@ -27,24 +28,41 @@ const expeseFavoriteTransactions = [
 ]
 
 class Home extends Component {
+  componentDidMount() {
+    let currentYear = new Date().getFullYear()
+    this.props.actions.data.getTransactions(currentYear)
+    this.props.actions.data.getYearTotal()
+    this.props.actions.data.getCategories()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.isAuthed === false && nextProps.isAuthed) {
+      let currentYear = new Date().getFullYear()
+      this.props.actions.data.getTransactions(currentYear)
+      this.props.actions.data.getYearTotal()
+      this.props.actions.data.getCategories()
+      this.props.actions.data.setCurrentMonth()
+
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
           <View style={styles.main}>
             <CurrentMonthTotal
-              getYearTotal={this.props.actions.data.getYearTotal}
               currentMonthTotal={this.props.currentMonthTotal}
             />
 
-            <FavoriteTransactions
+            {/* <FavoriteTransactions
               addTransaction={this.props.actions.data.addNewTransaction}
               incomeFavoriteTransactions={incomeFavoriteTransactions}
               expeseFavoriteTransactions={expeseFavoriteTransactions}
-            />
+            /> */}
 
             <AddTransactionButtons />
           </View>
-          
+
           <View style={styles.actions}>
             <UserActions handleLogout={this.props.actions.account.logoutAndUnauthUser} />
           </View>
@@ -82,14 +100,18 @@ const styles = StyleSheet.create({
 })
 
 Home.propTypes = {
-  isAuthed: PropTypes.bool.isRequired,
   currentMonthTotal: PropTypes.object
 }
 
 export default connect(
   (state) => ({
     isAuthed: state.account.isAuthed,
-    currentMonthTotal: state.data.currentMonthTotal
+    currentMonth: state.data.currentMonth,
+    currentMonthTotal: state.data.currentMonthTotal,
+    yearTotal: state.data.yearTotal,
+    categories: state.data.categories,
+    transactions: state.data.transactions,
+    currentMonth: state.data.currentMonth
   }),
   (dispatch) => ({
     actions: {
