@@ -82,6 +82,8 @@ class Routes extends Component {
                 leftButtonStyle={{paddingTop: 10}}
                 leftButtonTextStyle={{color: '#FFF'}}
                 onLeft={() => Actions.editTransactions({editMode: true, selectedItemIndex: false})}
+                rightTitle={plusIcon}
+                onRight={() => Actions.newTransaction({categoryType: 'Expense'})}
               >
                 <Scene key="viewTransactions" />
                 <Scene key="editTransactions"
@@ -108,7 +110,8 @@ class Routes extends Component {
                 <Scene key="viewCategoties" hideTabBar={false}/>
                 <Scene key="editCategory"
                   leftTitle='Done'
-                  onLeft={() => Actions.viewCategoties({editMode: false, deleteButtonWidth: 0, selectedCategoryIndex: null})}
+                  onLeft={() => Actions.viewCategoties({
+                    editMode: false, deleteButtonWidth: 0, selectedCategoryIndex: null})}
                   rightTitle={plusIconBlackDisabled}
                   onRight={() => {}}
                   hideTabBar={true}
@@ -118,10 +121,9 @@ class Routes extends Component {
             </Scene>
             <Scene
               key="newTransaction"
-              title="New Transaction"
               component={NewTransaction}
               hideNavBar={true}
-              type={ActionConst.RESET}
+              title="New Transaction"
             />
             <Scene
               key="categoryList"

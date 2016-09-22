@@ -6,15 +6,17 @@ import {
   ScrollView,
   LayoutAnimation,
   Keyboard,
-  Dimensions
+  Dimensions,
+  TouchableHighlight
 } from 'react-native'
-import Button from 'react-native-button'
-import { NewTransactionForm, CustomNavBar, addBorder } from '../../components'
-import { Actions } from 'react-native-router-flux'
+
+import { NewTransactionForm, CustomNavBar, addBorder, CategorySelector } from '../../components'
+import { Actions, ActionConst } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as dataActionCreators from '../../actions/data'
 import * as formActionCreators from '../../actions/form'
+import Button from 'react-native-button'
 
 class NewTransaction extends Component {
   constructor(props) {
@@ -25,9 +27,9 @@ class NewTransaction extends Component {
       category: 'Category',
       notes: null,
       error: '',
-      type: '',
       visibleHeight: null,
-      windowHeight: null
+      windowHeight: null,
+      categoryType: ''
     }
   }
 
@@ -35,10 +37,25 @@ class NewTransaction extends Component {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
     const height = Dimensions.get('window').height
-    this.setState({
-      windowHeight: height,
-      visibleHeight: height
-    })
+    if (this.props.isEdit) {
+      const tempDate = new Date(this.props.transaction.date)
+      const tempAmount = Math.abs(this.props.transaction.amount).toString()
+      this.setState({
+        windowHeight: height,
+        visibleHeight: height,
+        date: tempDate,
+        amount: tempAmount,
+        category: this.props.transaction.category,
+        notes: this.props.transaction.notes,
+        categoryType: this.props.transaction.type
+      })
+    } else {
+      this.setState({
+        windowHeight: height,
+        visibleHeight: height,
+        categoryType: this.props.categoryType
+      })
+    }
   }
 
   componentWillUnmount () {
@@ -68,7 +85,7 @@ class NewTransaction extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       category: nextProps.newCategory,
-      type: nextProps.categoryType
+      categoryType: nextProps.categoryType
     })
   }
 
@@ -97,10 +114,18 @@ class NewTransaction extends Component {
         amount: newAmount,
         category: this.state.category,
         notes: this.state.notes,
-        type: this.state.type
+        type: this.state.categoryType
       }
       this.props.actions.data.addNewTransaction(transaction)
-      Actions.tabbar()
+      this.setState({
+        date: new Date(),
+        amount: '',
+        category: 'Category',
+        notes: '',
+        error: '',
+        categoryType: ''
+      })
+      Actions.pop()
     }
   }
 
@@ -111,13 +136,22 @@ class NewTransaction extends Component {
       category: 'Category',
       notes: '',
       error: '',
-      type: 'Income'
+      type: '',
+      categoryType: ''
     })
     this.props.actions.form.clearForm()
-    Actions.tabbar()
+    Actions.pop()
+  }
+
+  onTypeChange = (type) => {
+    this.setState({ categoryType: type })
   }
 
   render() {
+    let incomeSelected, expenseSelected
+    if (this.state.categoryType === 'Income') { incomeSelected = true, expenseSelected = false }
+    else { incomeSelected = false, expenseSelected = true }
+
     return (
       <View style={[styles.container, {height: this.state.visibleHeight}]}>
         <CustomNavBar
@@ -126,6 +160,11 @@ class NewTransaction extends Component {
           title='New Transaction'
           leftButton='Cancel'
           rightButton='Save'
+        />
+        <CategorySelector
+          incomeSelected={incomeSelected}
+          expenseSelected={expenseSelected}
+          onTypeChange={this.onTypeChange}
         />
         <ScrollView
           keyboardDismissMode='interactive'
@@ -136,13 +175,21 @@ class NewTransaction extends Component {
             date={this.state.date}
             amount={this.state.amount}
             category={this.state.category}
-            categoryType={this.props.categoryType}
+            categoryType={this.state.categoryType}
             notes={this.state.notes}
             error={this.state.error}
             type={this.state.type}
             onDateChange={this.onDateChange}
             onInputChange={this.onInputChange}
           />
+          {this.props.isEdit
+            ? <View style={{alignItems: 'center'}}>
+                <Button style={styles.btnText}
+                  containerStyle={styles.btn}
+                  onPress={() => {}}>Delete transaction
+                </Button>
+              </View>
+            : <View></View>}
         </ScrollView>
       </View>
     )
@@ -155,7 +202,20 @@ NewTransaction.propTypes = {
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'stretch'
+  },
+  btnText: {
+    color: "#f2f2f2"
+  },
+  btn: {
+    backgroundColor:"red",
+    padding:4,
+    borderRadius: 5,
+    width:200,
+    margin: 8,
+    marginLeft: 15,
   }
 })
 
