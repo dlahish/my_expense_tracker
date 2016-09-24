@@ -19,7 +19,8 @@ import {
   Categories,
   NewCategory,
   Settings,
-  Transaction
+  Transaction,
+  CurrencySymbols
 } from '../components'
 import Icon from 'react-native-vector-icons/FontAwesome'
 const plusIcon = (<Icon name='plus' size={26} color='#FFF' />)
@@ -74,7 +75,8 @@ class Routes extends Component {
               <Scene key="transactions"
                 component={connect(state =>
                   ({transactions: state.data.transactions,
-                    currentMonth: state.data.currentMonth}))(Transactions)}
+                    currentMonth: state.data.currentMonth,
+                    currencySymbol: state.settings.currencySymbol}))(Transactions)}
                 removeTransaction={this.props.actions.data.removeTransaction}
                 icon={TabIcon}
                 title='Transactions'
@@ -142,6 +144,12 @@ class Routes extends Component {
               title="New Category"
               component={NewCategory}
               hideNavBar={true}
+            />
+            <Scene
+              key="currencySymbols"
+              title="Currency Symbols"
+              component={CurrencySymbols}
+              hideNavBar={false}
             />
           </Scene>
         </Scene>
