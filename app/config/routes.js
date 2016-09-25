@@ -75,7 +75,7 @@ class Routes extends Component {
               <Scene key="transactions"
                 component={connect(state =>
                   ({transactions: state.data.transactions,
-                    currentMonth: state.data.currentMonth,
+                    currentMonth: this.props.currentMonth,
                     currencySymbol: state.settings.currencySymbol}))(Transactions)}
                 removeTransaction={this.props.actions.data.removeTransaction}
                 icon={TabIcon}
@@ -126,8 +126,12 @@ class Routes extends Component {
               key="newTransaction"
               component={NewTransaction}
               hideNavBar={true}
+              removeTransaction={this.props.actions.data.removeTransaction}
               title="New Transaction"
-            />
+            >
+              <Scene key="viewNewTransaction" hideTabBar={true} />
+              <Scene key="newFavoriteTransaction" hideTabBar={true} />
+            </Scene>
             <Scene
               key="categoryList"
               title="Categories"

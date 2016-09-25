@@ -37,7 +37,13 @@ class NewTransaction extends Component {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
     const height = Dimensions.get('window').height
-    if (this.props.isEdit) {
+    if (this.props.isEdit && this.props.title === 'New Favorite Transaction' || !this.props.isEdit) {
+      this.setState({
+        windowHeight: height,
+        visibleHeight: height,
+        categoryType: this.props.categoryType
+      })
+    } else {
       const tempDate = new Date(this.props.transaction.date)
       const tempAmount = Math.abs(this.props.transaction.amount).toString()
       this.setState({
@@ -48,12 +54,6 @@ class NewTransaction extends Component {
         category: this.props.transaction.category,
         notes: this.props.transaction.notes,
         categoryType: this.props.transaction.type
-      })
-    } else {
-      this.setState({
-        windowHeight: height,
-        visibleHeight: height,
-        categoryType: this.props.categoryType
       })
     }
   }
@@ -116,7 +116,12 @@ class NewTransaction extends Component {
         notes: this.state.notes,
         type: this.state.categoryType
       }
-      this.props.actions.data.addNewTransaction(transaction)
+      if (this.props.title === 'New Transaction') {
+        this.props.actions.data.addNewTransaction(transaction)
+      } else {
+        this.props.actions.data.addNewFavoriteTransaction(transaction)
+      }
+
       this.setState({
         date: new Date(),
         amount: '',
@@ -147,6 +152,15 @@ class NewTransaction extends Component {
     this.setState({ categoryType: type })
   }
 
+  onDeleteTransaction = () => {
+    if (this.props.title === 'New Transaction') {
+      this.props.removeTransaction(this.props.transaction)
+      Actions.pop()
+    } else {
+      this.props.actions.data.removeNewFavoriteTransaction(transaction)
+    }
+  }
+
   render() {
     let incomeSelected, expenseSelected
     if (this.state.categoryType === 'Income') { incomeSelected = true, expenseSelected = false }
@@ -157,7 +171,7 @@ class NewTransaction extends Component {
         <CustomNavBar
           onLeftPress={this.onCancelPress}
           onRightPress={this.onSaveNewTransaction}
-          title='New Transaction'
+          title={this.props.title}
           leftButton='Cancel'
           rightButton='Save'
         />
@@ -186,7 +200,7 @@ class NewTransaction extends Component {
             ? <View style={{alignItems: 'center'}}>
                 <Button style={styles.btnText}
                   containerStyle={styles.btn}
-                  onPress={() => {}}>Delete transaction
+                  onPress={this.onDeleteTransaction}>Delete transaction
                 </Button>
               </View>
             : <View></View>}

@@ -4,13 +4,14 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as settingsActionCreators from '../actions/settings'
+import * as accountActions from '../actions/accounts'
 import Icon from 'react-native-vector-icons/FontAwesome'
 const smallRightArrow = (<Icon name='angle-right' size={22} />)
 import { UserActions, addBorder } from '../components'
 
 SettingLine = (props) => {
   return (
-    <TouchableHighlight onPress={() => Actions.currencySymbols({setCurrencySymbol: props.setCurrencySymbol})}>
+    <TouchableHighlight onPress={() => props.onPress()}>
       <View style={styles.settingLine}>
         <View>
           <Text style={styles.text}>{props.subject}</Text>
@@ -36,13 +37,23 @@ class Settings extends Component {
         <View>
           <ScrollView style={styles.scrollView}>
             <SettingLine
-              subject='Currency Symbol'
+              subject='Currency symbol'
               value={getSymbol(this.props.currencySymbol)}
-              setCurrencySymbol={this.props.actions.settings.setCurrencySymbol}/>
+              onPress={() =>
+                Actions.currencySymbols({setCurrencySymbol: this.props.actions.settings.setCurrencySymbol})}
+            />
+            <SettingLine
+              subject='Setup favorite transaction'
+              onPress={() => Actions.newTransaction({
+                title: 'New Favorite Transaction',
+                categoryType: 'Income',
+                isEdit: true
+              })}
+            />
           </ScrollView>
         </View>
 
-        <View style={[styles.actionsWrapper, addBorder(2, 'black')]}>
+        <View style={styles.actionsWrapper}>
           <View style={styles.actions}>
             <UserActions handleLogout={this.props.actions.account.logoutAndUnauthUser} />
           </View>
@@ -65,7 +76,8 @@ const styles = {
     paddingLeft: 15,
     paddingRight: 15,
     paddingTop: 5,
-    paddingBottom: 5
+    paddingBottom: 5,
+    marginBottom: 10
   },
   text: {
     fontSize: 20,
@@ -88,6 +100,6 @@ export default connect(
   (dispatch) => ({
     actions: {
       settings: bindActionCreators(settingsActionCreators, dispatch),
-      account:  bindActionCreators(settingsActionCreators, dispatch)
+      account:  bindActionCreators(accountActions, dispatch)
     }})
 )(Settings)
