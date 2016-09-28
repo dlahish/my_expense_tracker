@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Button from 'react-native-button'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -40,6 +40,10 @@ export default AddTransactionButtons = (props) => {
   )
 }
 
+AddTransactionButtons.propTypes = {
+  setCategoryType: PropTypes.func.isRequired
+}
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row'
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
 		color: 'black',
-    fontSize: 20,
+    fontSize: 15,
     paddingLeft: 10
 	},
 	btn: {
