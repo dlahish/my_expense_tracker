@@ -1,23 +1,30 @@
-import { SET_CURRENT_USER, REMOVE_CURRENT_USER } from '../constants'
+import { SET_TOKEN, SET_AUTH_ERROR, REMOVE_CURRENT_USER } from '../constants'
+import {REHYDRATE} from 'redux-persist/constants'
 const initialState = {
-  user: {},
-  isAuthed: undefined
+  token: undefined,
+  isAuthed: undefined,
+  authError: ''
 }
 
 export default function accounts (state = initialState, action) {
   switch (action.type) {
-    case SET_CURRENT_USER:
+    case SET_TOKEN:
       return {
         ...state,
-        user: action.user,
-        isAuthed: action.isAuthed
+        token: action.token,
+        isAuthed: action.isAuthed,
+        authError: ''
       }
-    case REMOVE_CURRENT_USER:
+    case SET_AUTH_ERROR:
       return {
         ...state,
-        user: {},
+        authError: action.message,
         isAuthed: false
       }
+    case REHYDRATE:
+      var incoming = action.payload.myReducer
+      if (incoming) return {...state, ...incoming, specialKey: processSpecial(incoming.specialKey)}
+      return state
     default:
       return state
   }

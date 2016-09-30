@@ -1,20 +1,32 @@
-import { SET_CURRENT_USER, REMOVE_CURRENT_USER } from './../constants'
+import { REMOVE_CURRENT_USER, SET_TOKEN, SET_AUTH_ERROR } from './../constants'
+import { purgeStoredState } from 'redux-persist'
+import { AsyncStorage } from 'react-native'
+import { getCurrencySymbol } from './settings'
 import {
-  checkAuth,
   currentUser,
   signin,
   signup,
   setAuth,
   revokeAuth
 } from './../api/accounts'
-import { Actions } from 'react-native-router-flux'
 
-function setCurrentUser (user, isAuthed = true) {
-  return {
-    type: SET_CURRENT_USER,
-    user,
-    isAuthed,
-  }
+import {
+  getTransactions,
+  getYearTotal,
+  getCategories,
+  getFavoriteTransactions,
+  setCurrentMonth
+} from './data'
+
+function loadingActions(dispatch, token) {
+  let currentYear = new Date().getFullYear()
+  dispatch(setCurrentMonth())
+  dispatch(setToken(token))
+  dispatch(getTransactions(currentYear, token))
+  dispatch(getYearTotal(currentYear, token))
+  dispatch(getCategories(token))
+  dispatch(getFavoriteTransactions())
+  dispatch(getCurrencySymbol())
 }
 
 function removeCurrentUser () {
@@ -23,29 +35,39 @@ function removeCurrentUser () {
   }
 }
 
-export function fetchIfCurrentUser() {
-  return function(dispatch) {
-    return checkAuth()
-      .then((token) => currentUser(token))
-      .then(response => {
-        if (response.data) dispatch(setCurrentUser(response.data))
-        else dispatch(setCurrentUser({}, false))
-      })
-      .catch((err) => console.warn(err))
+function setToken(token, isAuthed = true) {
+  return {
+    type: SET_TOKEN,
+    token,
+    isAuthed
+  }
+}
+
+export function setAuthError(message) {
+  return {
+    type: SET_AUTH_ERROR,
+    message
+  }
+}
+
+export function checkIfAuthed() {
+  console.log('CHECK IF AUTHED ----')
+  return function(dispatch, getState) {
+    const state = getState()
+    console.log(state)
   }
 }
 
 export function signinAndAuthUser (credentials) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     return signin(credentials)
-      .then((res) => setAuth(res))
-      .then((user) => {
-        if (user.authError) {
-          Actions.pop()
-          dispatch(setCurrentUser(user, false))
-          return getState().account.user.authError
+      .then((res) => {
+        if (res.data.message) {
+          dispatch(setAuthError(res.data.message))
         } else {
-          dispatch(setCurrentUser(user.data))
+          console.log('SIGN IN AND AUTH USER ----')
+          console.log(res.data.token)
+          loadingActions(dispatch, res.data.token)
         }
       })
       .catch((err) => console.warn(err))
@@ -53,15 +75,19 @@ export function signinAndAuthUser (credentials) {
 }
 
 export function signupAndAuthUser (credentials) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     return signup(credentials)
-      .then((res) => setAuth(res))
-      .then((data) => {
-        dispatch(setCurrentUser(data))
+      .then((res) => {
+        console.log('SIGN UP AND AUTH USER -------')
+        console.log(res.data)
+        if (res.data.message) {
+          dispatch(setAuthError(res.data.message))
+        } else {
+          loadingActions(dispatch, res.data.token)
+        }
       })
       .catch((err) => {
-        dispatch(setCurrentUser(err.response.data, false))
-        return getState().account.user.error
+        dispatch(setAuthError(err.response.data.error))
         console.log(err)
       })
   }
@@ -69,7 +95,11 @@ export function signupAndAuthUser (credentials) {
 
 export function logoutAndUnauthUser () {
   return function (dispatch) {
-    return revokeAuth()
-      .then(() => dispatch(removeCurrentUser()))
+    dispatch(setToken('', false))
+    purgeStoredState({storage: AsyncStorage}).then(() => {
+      console.log('purge of someReducer completed')
+    }).catch(() => {
+      console.log('purge of someReducer failed')
+    })
   }
 }
