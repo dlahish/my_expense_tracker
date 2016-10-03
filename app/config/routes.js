@@ -38,7 +38,7 @@ class Routes extends Component {
 
   render() {
     return (
-      this.props.loading && this.props.currentMonth.length > 0 ?
+      this.props.loading ?
           <Loader /> :
           <RouterWithRedux
             navigationBarStyle={styles.navBar}
@@ -58,12 +58,15 @@ class Routes extends Component {
 
               <Scene key="authed">
                 <Scene key="tabbar" tabs={true} tabBarStyle={styles.tabBar}>
-                  <Scene key="home" component={Home} icon={TabIcon} title={this.props.currentMonth} />
+                  <Scene
+                    key="home"
+                    title="Home"
+                    component={Home}
+                    icon={TabIcon}
+                    hideNavBar={true}
+                  />
                   <Scene key="transactions"
-                    component={connect(state =>
-                      ({transactions: state.data.transactions,
-                        currentMonth: this.props.currentMonth,
-                        currencySymbol: state.settings.currencySymbol}))(Transactions)}
+                    component={Transactions}
                     removeTransaction={this.props.actions.data.removeTransaction}
                     icon={TabIcon}
                     title='Transactions'
@@ -158,7 +161,6 @@ class Routes extends Component {
 
 export default connect(
   (state) => ({
-    currentMonth: state.data.currentMonth,
     token: state.account.token,
     loading: !state.storage.storageLoaded
   }),

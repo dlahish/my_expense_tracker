@@ -1,24 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 import { View, Text, ScrollView, TouchableHighlight } from 'react-native'
 import { getTransactions } from '../actions/data'
+import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 import { ItemRow } from '../components'
 import I18n from 'react-native-i18n'
 
-function getVisibleTransactions(transactions, month) {
-  monthFilter = (transaction) => {
-    const transactionMonth = new Date(transaction.date).getMonth()
-    return transactionMonth === month
-  }
-  sortDownDate = (a, b) => a.date > b.date ? 1 : a.date < b.date ? -1 : 0
-  sortUpDate = (a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0
-
-  if (transactions === undefined) { return [] }
-  else {
-    const filteredTransactions = transactions.filter(monthFilter)
-    return filteredTransactions.sort((a,b) => sortUpDate(a,b))
-  }
-}
+// function getVisibleTransactions(transactions, month) {
+//   monthFilter = (transaction) => {
+//     const transactionMonth = new Date(transaction.date).getMonth()
+//     return transactionMonth === month
+//   }
+//   sortDownDate = (a, b) => a.date > b.date ? 1 : a.date < b.date ? -1 : 0
+//   sortUpDate = (a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0
+//
+//   if (transactions === undefined) { return [] }
+//   else {
+//     const filteredTransactions = transactions.filter(monthFilter)
+//     return filteredTransactions.sort((a,b) => sortUpDate(a,b))
+//   }
+// }
 
 function setAmountColor(type) {
   if (type === 'Income') return {color: 'green'}
@@ -36,7 +37,7 @@ function getSymbol(symbol) {
   else return symbol
 }
 
-export default class Transactions extends Component {
+class Transactions extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -60,21 +61,21 @@ export default class Transactions extends Component {
   }
 
   render() {
-    const currentMonthIndex = new Date().getMonth()
-    const currentYear = new Date().getFullYear()
-    const VisibleTransactions = getVisibleTransactions(this.props.transactions[currentYear], currentMonthIndex)
+    // const currentMonthIndex = new Date().getMonth()
+    // const currentYear = new Date().getFullYear()
+    // const VisibleTransactions = getVisibleTransactions(this.props.transactions[currentYear], currentMonthIndex)
 
     return (
       <View style={styles.container}>
         <View style={styles.monthHeader}>
           <View style={styles.monthWrapper}>
             <Text style={styles.monthText}>
-              {this.props.currentMonth}
+              {this.props.currentMonthName}
             </Text>
           </View>
         </View>
         <ScrollView>
-            {VisibleTransactions.map((transaction, i) =>
+            {this.props.visibleTransactions.map((transaction, i) =>
               <ItemRow
                 key={i}
                 itemIndex={i}
@@ -98,6 +99,13 @@ export default class Transactions extends Component {
     )
   }
 }
+
+export default connect(
+  (state) =>
+    ({transactions: state.data.transactions,
+      visibleTransactions: state.data.visibleTransactions,
+      currentMonthName: state.data.currentMonthName,
+      currencySymbol: state.settings.currencySymbol}))(Transactions)
 
 const styles = {
   container: {
