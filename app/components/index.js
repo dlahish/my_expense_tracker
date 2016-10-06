@@ -32,6 +32,9 @@ import DisplayFavoriteTransactions from './homeScene/DisplayFavoriteTransactions
 import MessageModal from './common/MessageModal'
 import Loader from './common/Loader'
 import ListItem from './common/ListItem'
+import MonthHeader from './MonthHeader'
+import MenuModal from './common/MenuModal'
+import FilteredAndSortedTransactionsTotal from './FilteredAndSortedTransactionsTotal'
 
 export {
   Home,
@@ -67,5 +70,8 @@ export {
   MessageModal,
   DisplayFavoriteTransactions,
   Loader,
-  ListItem
+  ListItem,
+  MonthHeader,
+  MenuModal,
+  FilteredAndSortedTransactionsTotal
 }
