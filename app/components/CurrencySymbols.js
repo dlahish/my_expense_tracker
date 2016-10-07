@@ -12,10 +12,11 @@ function getSymbol(symbol) {
 
 export default CurrencySymbols = (props) => {
   onSymbolPress = (symbol) => {
-    props.saveCurrancySymbol(symbol)
-    Actions.pop()
+    props.setCurrancySymbol(symbol)
+    Actions.settings()
   }
-
+  console.log('currency symbols --------')
+  console.log(props)
   return (
     <ScrollView style={styles.container}>
       {symbols.map((symbol,i) =>
