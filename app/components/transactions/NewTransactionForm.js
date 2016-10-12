@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form'
+import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 import {
   View,
@@ -11,6 +13,10 @@ import {
 import Button from 'react-native-button'
 import { addBorder, DatePicker, DatePickerModal } from '../../components'
 import { Actions } from 'react-native-router-flux'
+
+function getIcon(name) {
+  return <Icon name={name} size={16} color='black' style={{paddingLeft: 10}}/>
+}
 
 class NewTransactionForm extends Component {
   constructor(props) {
@@ -32,9 +38,78 @@ class NewTransactionForm extends Component {
   }
 
   render() {
+    const { name, category, categoryType, amount, date, notes, handleValueChange, onDateChange, error } = this.props
     return (
       <View style={[styles.container]}>
-        {this.props.title !== 'New Favorite Transaction'
+        <GiftedForm
+          formName='newReminderForm'
+          openModal={route => Actions.formModal({ ...route, title: route.getTitle() })}
+          onValueChange={(values) => {
+            handleValueChange(values, GiftedFormManager.validate('newReminderForm'))
+          }}
+          validators={{
+            amount: {
+              title: 'Amount',
+              validate: [{
+                validator: 'isNumeric',
+                message: '{TITLE} must be a number'
+              }]
+            }
+          }}
+        >
+          <GiftedForm.NoticeWidget title={error} style={{paddingTop: 2, color: 'red'}}/>
+          {this.props.title !== 'New Favorite Transaction'
+            ? <GiftedForm.RowDatePicker
+                name='dateRow'
+                title='Date'
+                placeholder='Enter date'
+                image={getIcon('ios-calendar')}
+                date={date}
+                onDateChange={onDateChange}
+              /> : null }
+              <GiftedForm.TextInputWidget
+                name='amount'
+                title='Amount'
+                placeholder='Enter amount'
+                clearButtonMode='while-editing'
+                value={amount}
+                image={getIcon('ios-cash')}
+              />
+              <GiftedForm.RowWidgetWithTitle
+                title='Category'
+                disclosure={true}
+                onPress={() => Actions.categoryList({categoryType: this.props.categoryType})}
+                image={getIcon('ios-list-box')}
+                mainContent={category}
+                placeholder='Category'
+              />
+              <GiftedForm.TextAreaWidget
+                name='notes'
+                title='Notes'
+                placeholder='Enter Notes'
+                clearButtonMode='while-editing'
+                value={notes}
+              />
+              <GiftedForm.ErrorsWidget />
+              <GiftedForm.SubmitWidget
+                title='Add new transactions'
+                widgetStyles={{
+                  submitButton: {
+                    backgroundColor: 'green',
+                  }
+                }}
+                onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
+                  if (isValid === true) {
+                    values.date = date
+                    GiftedFormManager.reset('newReminderForm')
+                    this.props.onSaveNewTransaction(isValid)
+                  } else {
+                    console.log('validationResults', validationResults)
+                  }
+                }}
+              />
+        </GiftedForm>
+        {/* {this.props.title !== 'New Favorite Transaction'
           ? <View style={[styles.inputWrapper]}>
               <Text style={styles.inputTitle}>
                 Date:
@@ -101,7 +176,7 @@ class NewTransactionForm extends Component {
           date={this.props.date}
           timeZoneOffsetInHours={this.state.timeZoneOffsetInHours}
           onDateChange={this.props.onDateChange}
-        />
+        /> */}
       </View>
     )
   }
@@ -113,7 +188,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     backgroundColor: "#FFF",
-    paddingTop: 20
+    // paddingTop: 20
   },
   input: {
     flex: 2,
