@@ -1,6 +1,5 @@
 import Home from './homeScene/Home'
 import Signin from './authentication/Signin'
-import SigninForm from './authentication/SigninForm'
 import SignupForm from './authentication/SignupForm'
 import Signup from './authentication/Signup'
 import TabIcon from './common/TabIcon'
@@ -36,11 +35,11 @@ import Reminders from './reminders/Reminders'
 import NewReminder from './reminders/NewReminder'
 import RowDatePicker from './common/formWidgets/widgets/RowDatePicker'
 import RowWidgetWithTitle from './common/formWidgets/widgets/RowWidgetWithTitle'
+import LoadingOverlay from './common/LoadingOverlay'
 
 export {
   Home,
   Signin,
-  SigninForm,
   SignupForm,
   Signup,
   TabIcon,
@@ -75,5 +74,6 @@ export {
   Reminders,
   NewReminder,
   RowDatePicker,
-  RowWidgetWithTitle
+  RowWidgetWithTitle,
+  LoadingOverlay
 }
