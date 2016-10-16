@@ -17,14 +17,39 @@ class NewReminder extends Component {
         amount: '',
         date: new Date(),
         notes: ''
-      }
+      },
+      errors: ''
     }
   }
 
-  handleValueChange = (values) => {
-    values.date = this.state.form.date
-    values.completed = false
-    this.setState({ form: values })
+  onCancelPress = () => {
+    this.setState({
+      form: {
+        name: '',
+        type: '',
+        amount: '',
+        date: new Date(),
+        notes: ''
+      },
+      errors: ''
+    })
+    Actions.pop()
+  }
+
+  handleValueChange = (values, formValidateInfo) => {
+    let errors = ''
+    this.setState({
+      form: {
+        ...this.state.form,
+        isValid: formValidateInfo.isValid,
+        amount: values.amount,
+        notes: values.notes,
+        type: values.type,
+        name: values.name
+      },
+      errors,
+      formValidateInfo
+    })
   }
 
   onDateChange = (date) => {
@@ -34,15 +59,30 @@ class NewReminder extends Component {
   }
 
   onSubmitReminder = (isValid) => {
-    if (isValid) {
+    const s = this.state
+    if (s.form.isValid) {
       this.props.actions.reminders.setNewReminder(this.state.form)
       Actions.pop()
+    } else {
+      if (s.formValidateInfo === undefined) return this.setState({ errors: 'Please choose type of reminder'})
+      let errors = ''
+      if (!s.formValidateInfo.results.amount[0].isValid) errors += s.formValidateInfo.results.amount[0].message + '\n'
+      if (!s.formValidateInfo.results.name[0].isValid) errors += s.formValidateInfo.results.name[0].message + '\n'
+      if (!s.formValidateInfo.results.type[0].isValid) errors += s.formValidateInfo.results.type[0].message + '\n'
+      this.setState({ errors })
     }
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <CustomNavBar
+          onLeftPress={this.onCancelPress}
+          onRightPress={this.onSubmitReminder}
+          title={this.props.title}
+          leftButton='Cancel'
+          rightButton='Save'
+        />
         <NewReminderForm
           date={this.state.form.date}
           name={this.state.form.name}
@@ -52,6 +92,7 @@ class NewReminder extends Component {
           handleValueChange={this.handleValueChange}
           onDateChange={this.onDateChange}
           onSubmitReminder={this.onSubmitReminder}
+          errors={this.state.errors}
         />
       </View>
     )
@@ -62,7 +103,6 @@ class NewReminder extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 64,
     backgroundColor: 'rgb(253,253,253)',
   }
 })
