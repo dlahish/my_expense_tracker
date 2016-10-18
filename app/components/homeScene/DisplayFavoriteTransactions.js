@@ -43,14 +43,14 @@ function getAddButtonColor(favTransaction) {
 export default DisplayFavoriteTransactions = (props) => {
   const p = props
   return (
-    <View style={{flex: 1}}>
+    <View>
       {p.favoriteTransactions.length > 0
         ? p.favoriteTransactions.map((transaction, i) => {
             return renderFavoriteTransactions(transaction, i, p.onAddNewFavortieTransaction, p.favoriteTransactions.length)
           })
         : <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
             <View style={styles.messageBox}>
-              <Text style={{fontSize: 15}}>Go to setting to add a new preset transaction</Text>
+              <Text style={{fontSize: 15}}>Go to setting to add favorite transactions</Text>
             </View>
           </View>}
     </View>
@@ -63,6 +63,10 @@ DisplayFavoriteTransactions.propTypes = {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#eaeaea'
+  },
   favTransactionWrapper: {
     flexDirection: 'row',
     marginTop: 3,
@@ -97,6 +101,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 3,
     borderColor: 'black',
-    padding: 15
+    padding: 10
   }
 })
