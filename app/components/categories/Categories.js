@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { Actions } from 'react-native-router-flux'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { Actions, ActionConst } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { CustomNavBar, CategorySelector, ItemRow } from '../../components'
 import * as dataActionCreators from '../../actions/data'
+import * as formActionCreators from '../../actions/form'
 import {
   View,
   Text,
@@ -31,20 +32,32 @@ class Categories extends Component {
   }
 
   componentDidMount() {
-    this.props.getCategories()
+    this.props.actions.data.getCategories()
   }
 
   onTypeChange = (type) => {
     this.setState({ categoryType: type })
   }
 
-  onSelecetItem = (itemIndex, selected) => {
+  onSelecetItem = (itemIndex, selected, category) => {
     const selectedItemIndex = this.state.selectedItemIndex
     if (this.props.editMode) {
       if (selected) this.setState({ selectedItemIndex: null})
       else if (selectedItemIndex !== null && itemIndex !== selectedItemIndex) this.setState({ selectedItemIndex: null})
       else this.setState({ selectedItemIndex: itemIndex })
+    } else {
+      Actions.newCategory({editMode: true, categoryType: category.type, category})
     }
+  }
+
+  getIcon = (categoryName) => {
+    if (this.props.categoryIcons[categoryName]) return this.props.categoryIcons[categoryName]
+    else return 'ios-pricetag'
+  }
+
+  onLeftPress = () => {
+    this.props.actions.form.clearForm()
+    Actions.settingsPage()
   }
 
   render() {
@@ -60,9 +73,9 @@ class Categories extends Component {
           onRightPress={() => Actions.newCategory({categoryType: this.state.categoryType})}
           title='Categories'
           secondLeftButton='Edit'
-          rightButton={<Icon name='plus' size={26} color='#FFF' />}
+          rightButton={<Icon name='md-add' size={26} color='#FFF' />}
           leftButton='Back'
-          onLeftPress={() => Actions.settings()}
+          onLeftPress={() => this.onLeftPress()}
         />
         <CategorySelector
           incomeSelected={incomeSelected}
@@ -78,8 +91,9 @@ class Categories extends Component {
               selected={i === this.state.selectedItemIndex ? true : false}
               item={category}
               mainText={category.name}
+              icon={this.getIcon(category.name)}
               onSelecetItem={this.onSelecetItem}
-              onDeleteItem={() => this.props.removeCategory(category)}
+              onDeleteItem={() => this.props.actions.data.removeCategory(category)}
             />
           )}
         </ScrollView>
@@ -120,10 +134,18 @@ const styles = {
 }
 
 Categories.propType = {
-  categories: PropTypes.array
+  categories: PropTypes.array,
+  categoryIcons: PropTypes.array
 }
 
 export default connect(
-  (state) => ({ categories: state.data.categories }),
-  (dispatch) => (bindActionCreators(dataActionCreators, dispatch))
+  (state) => ({
+    categories: state.data.categories,
+    categoryIcons: state.categories.categoryIconIndex }),
+  (dispatch) => ({
+    actions: {
+      data: bindActionCreators(dataActionCreators, dispatch),
+      form: bindActionCreators(formActionCreators, dispatch)
+    }
+  })
 )(Categories)

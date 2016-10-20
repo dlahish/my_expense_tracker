@@ -7,7 +7,9 @@ import {
   SET_YEAR_TRANSACTIONS,
   SET_FAVORITE_TRANSACTION,
   DELETE_FAVORITE_TRANSACTION,
-  SET_VISIBLE_TRANSACTIONS
+  SET_VISIBLE_TRANSACTIONS,
+  SAVE_CATEGORY_ICON,
+  DELETE_CATEGORY_ICON
 } from './../constants'
 import {
   fetchYearTotal,
@@ -45,6 +47,15 @@ function setCurrentMonthTotal(data, currentMonthIndex) {
   }
 }
 
+export function saveCategoryIcon(category) {
+  console.log('save category icon', category.iconName)
+  return {
+    type: SAVE_CATEGORY_ICON,
+    iconName: category.iconName,
+    name: category.name
+  }
+}
+
 export function setMonth(type, currentMonthIndex, yearTotal, transactions) {
   return function(dispatch) {
     if (type === 'next' && currentMonthIndex === 11) { return }
@@ -73,6 +84,13 @@ function setYearlyTransactions(response, year) {
     type: SET_YEAR_TRANSACTIONS,
     data: response.data.data,
     year
+  }
+}
+
+function deleteCategoryIcon(category) {
+  return {
+    type: DELETE_CATEGORY_ICON,
+    category
   }
 }
 
@@ -181,6 +199,7 @@ export function removeCategory(category) {
     const token = getToken(getState())
     deleteCategory(token, category)
       .then((response) => {
+        dispatch(deleteCategoryIcon(category))
         dispatch(getCategories(token))
       })
       .catch((err) => console.log(err))
@@ -249,6 +268,7 @@ export function addNewCategory(category) {
     const token = getToken(getState())
     saveNewCategory(token, category)
       .then((response) => {
+        dispatch(saveCategoryIcon(category))
         dispatch(getCategories(token))
       })
       .catch((err) => console.log(err))

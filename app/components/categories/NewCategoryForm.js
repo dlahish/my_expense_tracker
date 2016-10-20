@@ -1,14 +1,21 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Button from 'react-native-button'
-import { addBorder, CategorySelector } from '../../components'
+import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form'
+import { addBorder, CategorySelector, RowWidgetWithTitle } from '../../components'
 import { Actions } from 'react-native-router-flux'
+import Icon from 'react-native-vector-icons/Ionicons'
 import {
   View,
   Text,
   StyleSheet,
   TextInput
 } from 'react-native'
+
+function getIcon(icon) {
+  if (icon) return <Icon name={icon} size={16} color='black' style={{paddingLeft: 10}}/>
+  return ''
+}
 
 export default class NewCategoryForm extends Component {
   render() {
@@ -24,7 +31,44 @@ export default class NewCategoryForm extends Component {
           onTypeChange={this.props.onTypeChange}
         />
 
-        <View style={[styles.inputWrapper]}>
+        <GiftedForm
+          formName='newCategoryForm'
+          onValueChange={(values) => {
+            this.props.handleValueChange(values, GiftedFormManager.validate('newCategoryForm'))
+          }}
+          validators={{
+            name: {
+              title: 'Category',
+              validate: [{
+                validator: 'isLength',
+                arguments: [1, 15],
+                message: '{TITLE} is required'
+              }]
+            }
+          }}
+        >
+            <GiftedForm.TextInputWidget
+              name='name'
+              title='Category'
+              placeholder='Category name'
+              clearButtonMode='while-editing'
+              value={this.props.categoryName}
+              image={getIcon('md-person')}
+            />
+
+            <RowWidgetWithTitle
+              title='Icon'
+              disclosure={true}
+              onPress={() => Actions.categoryIcons()}
+              image={getIcon('ios-list-box')}
+              mainContent={getIcon(this.props.iconName)}
+              placeholder='Select an icon'
+            />
+
+            <GiftedForm.NoticeWidget title={this.props.error} style={{color: 'red'}}/>
+
+        </GiftedForm>
+        {/* <View style={[styles.inputWrapper]}>
           <Text style={styles.inputTitle}>
             Name:
           </Text>
@@ -36,7 +80,7 @@ export default class NewCategoryForm extends Component {
             multiline={true}
             numberOfLines = {1}
           />
-        </View>
+        </View> */}
       </View>
     )
   }
@@ -88,6 +132,7 @@ var styles = StyleSheet.create({
 })
 
 NewCategoryForm.propTypes = {
-  onInputChange: PropTypes.func.isRequired,
-  categoryType: PropTypes.string.isRequired
+  // onInputChange: PropTypes.func.isRequired
+  categoryType: PropTypes.string.isRequired,
+  iconName: PropTypes.string
 }
