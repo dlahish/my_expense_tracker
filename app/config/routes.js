@@ -23,7 +23,6 @@ import {
   CurrencySymbols,
   PresetTransactions,
   Loader,
-  Export,
   Reminders,
   NewReminder,
   CategoryIcons
@@ -179,7 +178,6 @@ class Routes extends Component {
                     />
                 </Scene>
 
-                <Scene key="export" title="Export to CSV" component={Export} />
                 <Scene key="categoryIcons" title="Category Icons" component={CategoryIcons} />
               </Scene>
             </Scene>
