@@ -15,6 +15,7 @@ import { getTransactions } from '../../actions/data'
 import { bindActionCreators } from 'redux'
 import * as dataActions from '../../actions/data'
 import * as formActions from '../../actions/form'
+import * as transactionsActions from '../../actions/transactions'
 import {searchTransactions, sortTransactions} from '../../functions/transactionsSearchAndFilter'
 const upArrow = (<Icon name='angle-up' size={24} color='#FFF' />)
 import onSendEmail from '../../functions/exportToCsv'
@@ -41,10 +42,13 @@ class Transactions extends Component {
   }
 
   componentDidMount() {
+    console.log('transactions, component did mount')
     this.refs._scrollView.scrollTo({y: this.state.scrollY})
   }
 
   componentWillReceiveProps(nextProps) {
+    dispatch(getVisibleTransactions(this.props.transactions, this.props.currentMonthIndex))
+    console.log('transactions, component will receive props')
     if (this.props.visibleTransactions !== nextProps.visibleTransactions) {
       this.setState({isLoading: false})
     }
@@ -86,10 +90,11 @@ class Transactions extends Component {
 
   onDeleteTransaction = (transaction) => {
     this.setState({ isLoading: true })
-    this.props.removeTransaction(transaction)
+    this.props.actions.transactions.removeTransaction(transaction)
   }
 
   render() {
+    console.log('transactions - RENDER --')
     const p = this.props
     let transactionsToRender = searchTransactions(p.visibleTransactions, this.state.searchValue)
     transactionsToRender = sortTransactions(transactionsToRender,
@@ -180,7 +185,7 @@ class Transactions extends Component {
 
 export default connect(
   (state) => ({
-    transactions: state.data.transactions[state.data.currentYear],
+    transactions: state.transactions.transactions,
     visibleTransactions: state.data.visibleTransactions,
     currentMonthName: state.data.currentMonthName,
     currentMonthIndex: state.data.currentMonthIndex,
@@ -192,6 +197,7 @@ export default connect(
   (dispatch) => ({
     actions: {
       data: bindActionCreators(dataActions, dispatch),
+      transactions: bindActionCreators(transactionsActions, dispatch),
       form: bindActionCreators(formActions, dispatch)
     }
   }))(Transactions)
