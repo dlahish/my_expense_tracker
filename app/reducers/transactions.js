@@ -2,12 +2,16 @@ import { REHYDRATE } from 'redux-persist/constants'
 import {
   SAVE_NEW_TRANSACTION,
   DELETE_TRANSACTION,
-  SET_FETCHED_TRANSACTIONS
+  SET_FETCHED_TRANSACTIONS,
+  FORCED_NEW_PROPS,
+  UPDATE_TRANSACTION
 } from '../constants'
 
 const initialState = {
   idIndex: 0,
-  transactions: []
+  transactions: [],
+  synced: false,
+  forcedNewProps: false
 }
 
 export default function transactions (state = initialState, action) {
@@ -15,34 +19,41 @@ export default function transactions (state = initialState, action) {
     case SAVE_NEW_TRANSACTION:
       let transaction = action.transaction
       transaction.id = state.idIndex
-      return { ...state, transactions: state.transactions.concat(transaction), idIndex: state.idIndex + 1 }
+      return { ...state,
+        transactions: state.transactions.concat(transaction),
+        idIndex: state.idIndex + 1,
+        synced: false }
     case DELETE_TRANSACTION:
       let nextTransactions = []
       state.transactions.every((transaction, i) => {
-          console.log('transaction.id', transaction.id);
-          console.log('transaction._id', transaction._id);
           if (transaction.id === undefined) {
-              console.log('id null or undefined');
               if (transaction._id === action.transaction._id) {
                 nextTransactions = [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
                 return false
-              } else {
-                return true
-              }
+              } else { return true }
           } else {
-              console.log('id exists');
               if (transaction.id === action.transaction.id) {
                 nextTransactions = [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
                 return false
-              } else {
-                return true
-              }
+              } else { return true }
           }
-
       })
-      return { ...state, transactions: nextTransactions }
+      return { ...state, transactions: nextTransactions, synced: false }
     case SET_FETCHED_TRANSACTIONS:
-      return { ...state, transactions: action.transactions }
+      return { ...state, transactions: action.transactions, idIndex: 0, synced: true }
+    case UPDATE_TRANSACTION:
+      nextTransactions = state.transactions.map((transaction) => {
+        if (!!transaction.id === false) {
+          if (transaction._id === action.transaction._id) return action.transaction
+          else return transaction
+        } else {
+          if (transaction.id === action.transaction.id) return action.transaction
+          else return transaction
+        }
+      })
+      return { ...state, transactions: nextTransactions, forcedNewProps: !state.forcedNewProps }
+    case FORCED_NEW_PROPS:
+      return { ...state, forcedNewProps: !state.forcedNewProps }
     case REHYDRATE:
       var incoming = action.payload.myReducer
       if (incoming) return {...state, ...incoming, specialKey: processSpecial(incoming.specialKey)}

@@ -8,6 +8,9 @@ import {
   SET_VISIBLE_TRANSACTIONS,
   SET_FETCHED_TRANSACTIONS
 } from './../constants'
+
+import { addNewTransaction } from './transactions'
+
 import {
   fetchYearTotal,
   saveNewTransaction,
@@ -53,7 +56,6 @@ export function getVisibleTransactions(transactions, currentMonthIndex) {
     dispatch((setVisibleTransactions(visibleTransactions)))
   }
 }
-
 //
 // export function addNewFavoriteTransaction(favTransaction) {
 //   return function(dispatch) {
@@ -143,7 +145,6 @@ export function getTransactions(year, token, currentMonthIndex = new Date().getM
 //   }
 // }
 //
-
 // export function addNewTransaction(transaction) {
 //   return function(dispatch, getState) {
 //     const state = getState()
@@ -171,5 +172,36 @@ export function setCurrentMonth(monthIndex = new Date().getMonth()) {
     currentMonthName: monthNames[monthIndex],
     currentMonthIndex: monthIndex,
     currentYear
+  }
+}
+
+function setFavoriteTransaction(transaction, favoriteTransactionsId) {
+  transaction.id = favoriteTransactionsId
+  return {
+    type: SET_FAVORITE_TRANSACTION,
+    transaction
+  }
+}
+
+export function addNewFavoriteTransaction(favTransaction) {
+  return function(dispatch) {
+    const date = new Date()
+    favTransaction = { ...favTransaction, date: date }
+    dispatch(addNewTransaction(favTransaction))
+  }
+}
+
+export function removeFavoriteTransaction(transaction) {
+  return {
+    type: DELETE_FAVORITE_TRANSACTION,
+    transaction
+  }
+}
+
+export function addFavoriteTransaction(transaction) {
+  return function(dispatch, getState) {
+    const state = getState()
+    favoriteTransactionsId = state.data.favoriteTransactions.length + 1
+    dispatch(setFavoriteTransaction(transaction, favoriteTransactionsId))
   }
 }

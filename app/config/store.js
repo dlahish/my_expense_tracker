@@ -9,7 +9,7 @@ const logger = createLogger()
 
 const store = createStore(rootReducer, compose(
 	applyMiddleware(thunk, logger),
-	applyMiddleware(thunk),
+	// applyMiddleware(thunk),
 	autoRehydrate()
 ));
 

@@ -31,7 +31,8 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.transactions.length !== nextProps.transactions.length) {
+    if (this.props.transactions.length !== nextProps.transactions.length
+    || this.props.forcedNewProps !== nextProps.forcedNewProps) {
       this.props.actions.data.getVisibleTransactions(nextProps.transactions, this.props.currentMonthIndex)
     }
     this.setState({ isLoading: false })
@@ -103,7 +104,7 @@ Home.propTypes = {
   transactions: PropTypes.array,
   currencySymbol: PropTypes.node,
   favoriteTransactions: PropTypes.array,
-
+  forcedNewProps: PropTypes.bool
 }
 
 export default connect(
@@ -113,10 +114,10 @@ export default connect(
     currencySymbol: state.settings.currencySymbol,
     favoriteTransactions: state.data.favoriteTransactions,
     yearTotal: state.data.yearTotal,
-    // transactions: state.data.transactions[state.data.currentYear],
     transactions: state.transactions.transactions,
     visibleTransactions: state.data.visibleTransactions,
-    customFavorites: state.settings.customFavorites
+    customFavorites: state.settings.customFavorites,
+    forcedNewProps: state.transactions.forcedNewProps
   }),
   (dispatch) => ({
     actions: {

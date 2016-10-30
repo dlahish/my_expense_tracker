@@ -47,8 +47,6 @@ class Transactions extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    dispatch(getVisibleTransactions(this.props.transactions, this.props.currentMonthIndex))
-    console.log('transactions, component will receive props')
     if (this.props.visibleTransactions !== nextProps.visibleTransactions) {
       this.setState({isLoading: false})
     }
@@ -94,7 +92,6 @@ class Transactions extends Component {
   }
 
   render() {
-    console.log('transactions - RENDER --')
     const p = this.props
     let transactionsToRender = searchTransactions(p.visibleTransactions, this.state.searchValue)
     transactionsToRender = sortTransactions(transactionsToRender,

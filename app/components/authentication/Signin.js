@@ -75,6 +75,7 @@ class Signin extends Component {
                             autoCapitalize='none'
                             returnKeyType='next'
                             onSubmitEditing={() => this.refs.passwordInput.focus()}
+                            keyboardType='email-address'
                         />
                     </View>
                     <View style={styles.inputContainer}>
@@ -137,7 +138,6 @@ var styles = StyleSheet.create({
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        // flex: .5,
         backgroundColor: 'transparent'
     },
     mark: {
@@ -152,12 +152,10 @@ var styles = StyleSheet.create({
     signup: {
       justifyContent: 'center',
       alignItems: 'center',
-      // flex: .15
     },
     inputs: {
         marginTop: 10,
         marginBottom: 10,
-        // flex: .25
     },
     inputPassword: {
         marginLeft: 15,
