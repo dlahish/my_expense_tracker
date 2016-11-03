@@ -14,7 +14,7 @@ export default class NewReminderForm extends Component {
   render() {
     const { name, type, amount, date, notes, handleValueChange, onDateChange } = this.props
     return (
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps={true}>
       <GiftedForm
         formName='newReminderForm'
         onValueChange={(values) => {
@@ -75,6 +75,7 @@ export default class NewReminderForm extends Component {
           <GiftedForm.TextInputWidget
             name='amount'
             title='Amount'
+            keyboardType='numeric'
             placeholder='Enter amount'
             clearButtonMode='while-editing'
             value={amount}

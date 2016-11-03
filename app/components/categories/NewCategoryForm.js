@@ -31,7 +31,7 @@ export default class NewCategoryForm extends Component {
           expenseSelected={expenseSelected}
           onTypeChange={this.props.onTypeChange}
         />
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
         <GiftedForm
           formName='newCategoryForm'
           onValueChange={(values) => {

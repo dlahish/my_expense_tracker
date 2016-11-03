@@ -32,7 +32,7 @@ class NewTransactionForm extends Component {
     const { name, category, categoryType, amount, date, notes, handleValueChange, onDateChange, error } = this.props
     return (
       <View style={[styles.container]}>
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps={true}>
           <GiftedForm
             formName='newTransactionForm'
             onValueChange={(values) => {
