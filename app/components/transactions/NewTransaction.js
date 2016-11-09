@@ -44,6 +44,7 @@ class NewTransaction extends Component {
             tempAmount = Math.abs(this.props.transaction.amount).toString()
       this.setState({
         _id: this.props.transaction._id,
+        id: this.props.transaction.id,
         date: tempDate,
         amount: tempAmount,
         category: this.props.transaction.category,
@@ -55,7 +56,7 @@ class NewTransaction extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      ...this.state,
+      // ...this.state,
       category: nextProps.newCategory,
       categoryType: nextProps.categoryType,
       error: ''
@@ -94,6 +95,7 @@ class NewTransaction extends Component {
             if (this.state.categoryType === 'Expense') newAmount = this.state.amount * -1
             const transaction = {
               _id: this.state._id,
+              id: this.state.id,
               date: this.state.date,
               amount: newAmount,
               category: this.state.category,
@@ -101,6 +103,7 @@ class NewTransaction extends Component {
               type: this.state.categoryType
             }
             if (this.props.title === 'New Transaction') {
+              console.log('on save new transaction', transaction)
               if (!this.props.editMode || this.props.customFavorites) {
                 this.props.actions.transactions.addNewTransaction(transaction)
                 this.setState({isLoading: true})

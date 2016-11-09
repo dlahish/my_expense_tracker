@@ -1,4 +1,4 @@
-import routes as routesStyles from './routes'
+import routesStyles from './routes'
 
 export {
   routesStyles

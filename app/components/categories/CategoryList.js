@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as formActionCreators from '../../actions/form'
 import { Actions } from 'react-native-router-flux'
-import Button from 'react-native-button'
 import { ItemRow, ListItem } from '../../components'
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 
@@ -49,12 +48,6 @@ class CategoryList extends Component {
               />
             </TouchableOpacity>
 
-
-            {/* <Button style={styles.btnText}
-              containerStyle={styles.btn}
-              onPress={() => Actions.newCategory({categoryType: this.props.categoryType})}>Add New Category
-            </Button> */}
-
         </ScrollView>
     )
   }
@@ -64,18 +57,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 64
-  },
-  btnText: {
-    color: "#f2f2f2",
-    fontSize: 17,
-    fontWeight: '400'
-  },
-  btn: {
-    backgroundColor:"#555",
-    padding:4,
-    borderRadius: 4,
-    marginTop: 8,
-    marginLeft: 25,
   }
 })
 

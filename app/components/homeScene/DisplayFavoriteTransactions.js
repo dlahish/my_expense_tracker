@@ -75,39 +75,6 @@ DisplayFavoriteTransactions.propTypes = {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eaeaea'
-  },
-  favTransactionWrapper: {
-    flexDirection: 'row',
-    marginTop: 3,
-    marginBottom: 3
-  },
-  buttonWrapper: {
-    backgroundColor: '#2ecc71',
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingTop: 2,
-    paddingBottom: 2,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5
-  },
-  favTransactionText: {
-    fontSize: 15,
-    flex: 0.5
-  },
-  favTransactionTextWrapper: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingLeft: 5,
-    paddingRight: 5,
-    backgroundColor: '#BBB',
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    paddingTop: 4,
-    paddingBottom: 2
-  },
   messageBox: {
     backgroundColor: '#eaeaea',
     borderWidth: 1,

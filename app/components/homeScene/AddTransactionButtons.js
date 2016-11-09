@@ -42,11 +42,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around'
   },
-  buttonContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   btnText: {
     fontSize: 15,
     fontWeight: '600',
@@ -59,9 +54,6 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center'
-	},
-  bgDark: {
-		backgroundColor: "#333",
 	},
   bgGreen: {
     backgroundColor: '#3CB371'

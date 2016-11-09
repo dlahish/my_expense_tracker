@@ -154,13 +154,6 @@ var styles = StyleSheet.create({
       flex: 1,
 			backgroundColor: 'rgb(0, 153, 204)'
     },
-    bg: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: windowSize.width,
-        height: windowSize.height
-    },
     header: {
 				paddingTop: 54,
         alignItems: 'flex-start',
@@ -172,10 +165,6 @@ var styles = StyleSheet.create({
 			fontWeight: '300',
 			color: '#FFF'
 		},
-    mark: {
-        width: 170,
-        height: 170
-    },
     signin: {
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -189,11 +178,6 @@ var styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         flex: .4
-    },
-    inputPassword: {
-        marginLeft: 15,
-        width: 20,
-        height: 21
     },
     inputUsername: {
       marginLeft: 15,

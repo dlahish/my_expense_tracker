@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Button from 'react-native-button'
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form'
 import { addBorder, CategorySelector, RowWidgetWithTitle } from '../../components'
 import { Actions } from 'react-native-router-flux'
@@ -81,42 +80,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     backgroundColor: "#FFF"
-  },
-  inputWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  inputTitle: {
-    flex: 1,
-    backgroundColor: "#fff",
-    marginBottom: 10,
-    padding:10,
-    paddingRight: 0,
-    fontWeight: '600',
-    fontSize: 20
-  },
-  input: {
-    flex: 2,
-    backgroundColor: "#fff",
-    fontSize: 20,
-    marginBottom: 10,
-    padding:10,
-    borderBottomWidth: 2,
-    borderBottomColor: '#BBBBBB'
-  },
-  typeWrapper: {
-    flexDirection: 'row',
-    marginBottom: 20,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5
-  },
-  typeButton: {
-    flex:1,
-    alignItems: 'center',
-    borderRadius: 5
   }
 })
 

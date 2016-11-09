@@ -127,13 +127,6 @@ var styles = StyleSheet.create({
       paddingTop: 20,
 			backgroundColor: 'rgb(0, 153, 204)'
     },
-    bg: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: windowSize.width,
-        height: windowSize.height
-    },
     header: {
         marginTop: 20,
         justifyContent: 'center',
@@ -156,11 +149,6 @@ var styles = StyleSheet.create({
     inputs: {
         marginTop: 10,
         marginBottom: 10,
-    },
-    inputPassword: {
-        marginLeft: 15,
-        width: 20,
-        height: 21
     },
     inputUsername: {
       marginLeft: 15,

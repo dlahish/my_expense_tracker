@@ -42,7 +42,6 @@ class Transactions extends Component {
   }
 
   componentDidMount() {
-    console.log('transactions, component did mount')
     this.refs._scrollView.scrollTo({y: this.state.scrollY})
   }
 
@@ -97,7 +96,6 @@ class Transactions extends Component {
     transactionsToRender = sortTransactions(transactionsToRender,
                                             this.state.sortType,
                                             this.state[`${this.state.sortType}SortDirection`])
-
     return (
       <View style={styles.container}>
 
@@ -189,7 +187,8 @@ export default connect(
     yearTotal: state.data.yearTotal,
     currencySymbol: state.settings.currencySymbol,
     transactionsSearchValue: state.form.transactionsSearchValue,
-    categoryIconIndex: state.categories.categoryIconIndex
+    categoryIconIndex: state.categories.categoryIconIndex,
+    forcedNewProps: state.transactions.forcedNewProps
   }),
   (dispatch) => ({
     actions: {
@@ -207,7 +206,8 @@ Transactions.propTypes = {
   yearTotal: PropTypes.array,
   currencySymbol: PropTypes.string,
   transactionsSearchValue: PropTypes.string,
-  categoryIconIndex: PropTypes.object
+  categoryIconIndex: PropTypes.object,
+  forcedNewProps: PropTypes.bool
 }
 
 const styles = {

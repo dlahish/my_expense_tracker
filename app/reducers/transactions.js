@@ -24,7 +24,7 @@ export default function transactions (state = initialState, action) {
         idIndex: state.idIndex + 1,
         synced: false }
     case DELETE_TRANSACTION:
-      let nextTransactions = []
+      let nextTransactions = [], id = state.idIndex
       state.transactions.every((transaction, i) => {
           if (transaction.id === undefined) {
               if (transaction._id === action.transaction._id) {
@@ -38,17 +38,24 @@ export default function transactions (state = initialState, action) {
               } else { return true }
           }
       })
-      return { ...state, transactions: nextTransactions, synced: false }
+      if (nextTransactions.length === 0) id = 0
+      return { ...state, transactions: nextTransactions, synced: false, idIndex: id }
     case SET_FETCHED_TRANSACTIONS:
       return { ...state, transactions: action.transactions, idIndex: 0, synced: true }
     case UPDATE_TRANSACTION:
       nextTransactions = state.transactions.map((transaction) => {
-        if (!!transaction.id === false) {
+        if (transaction.id === undefined) {
           if (transaction._id === action.transaction._id) return action.transaction
           else return transaction
         } else {
-          if (transaction.id === action.transaction.id) return action.transaction
-          else return transaction
+          if (transaction.id === action.transaction.id) {
+            console.log('transaction date', transaction.date, typeof transaction.date)
+            return action.transaction
+          }
+          else {
+            console.log('no ID in tranaction')
+            return transaction
+          }
         }
       })
       return { ...state, transactions: nextTransactions, forcedNewProps: !state.forcedNewProps }
