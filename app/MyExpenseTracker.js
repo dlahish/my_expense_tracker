@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet, StatusBar } from 'react-native'
 import MetNavigator from './MetNavigator'
 
 export default class MyExpenseTracker extends Component {
@@ -17,8 +17,14 @@ export default class MyExpenseTracker extends Component {
           backgroundColor="rgba(0, 0, 0, 0.2)"
           barStyle="default"
         />
-        <MetNavigator tab='Home'/>
+        <MetNavigator />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+})

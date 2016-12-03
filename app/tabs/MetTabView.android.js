@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import MetDrawerLayout from '../MetComponents/MetDrawerLayout'
 import {Home} from '../components'
 
-class MetTabView extends Component {
+export default class MetTabView extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,8 +21,8 @@ class MetTabView extends Component {
   }
 
   renderContent() {
-    switch (this.props.tabs) {
-      case 'home':
+    switch (this.props.tab) {
+      case 'Home':
         return <Home />
     }
     throw new Error(`Unknown tab ${this.props.tab}`)
@@ -30,15 +30,16 @@ class MetTabView extends Component {
 
   render() {
     return(
-      <F8DrawerLayout
+      <MetDrawerLayout
         ref="drawer"
         drawerWidth={290}
         drawerPosition="left"
         renderNavigationView={this.renderNavigationView}>
         <View style={styles.content} key={this.props.tab}>
           {this.renderContent()}
+          {/* <Text style={{color: '#FFF'}}>Hello World</Text> */}
         </View>
-      </F8DrawerLayout>
+      </MetDrawerLayout>
     )
   }
 }
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 12,
-    color: F8Colors.lightText,
+    // color: F8Colors.lightText,
     textAlign: 'center',
     marginBottom: 10,
   },

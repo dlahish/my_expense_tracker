@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid'
 
-class MetDrawerLayout extends Component {
+export default class MetDrawerLayout extends Component {
   constructor() {
     super()
     this.state = {

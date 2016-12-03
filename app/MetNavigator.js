@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { StyleSheet, Navigator } from 'react-native'
 import MetTabView from './tabs/MetTabView'
 
-class MetNavigator extends Component {
+export default class MetNavigator extends Component {
   constructor() {
     super()
     this.state = {
@@ -13,7 +13,7 @@ class MetNavigator extends Component {
   }
 
   renderScene(route, navigator) {
-    return <MetTabView navigator={navigator} />
+    return <MetTabView navigator={navigator} tab='Home'/>
   }
 
   render() {
