@@ -4,14 +4,15 @@ import moment from 'moment'
 var Mailer = require('NativeModules').RNMail
 var RNFS = require('react-native-fs')
 
-createCsvContent = (transactions) => {
+createFileContent = (transactions) => {
   let fileContent = 'Category, Amount, Date, Type, Notes'+'\n'
 
-  for (var i=0; i < transactions.length; i++) {
+  for (let i=0; i < transactions.length; i++) {
     let transaction = transactions[i]
     let formattedDate = moment(transaction.date).format('DD/MM/YYYY')
     fileContent += `${transaction.category}, ${transaction.amount}, ${formattedDate}, ${transaction.type}, ${transaction.notes},` + '\n'
   }
+
   return fileContent
 }
 
@@ -34,9 +35,8 @@ handleEmail = (path) => {
 }
 
 export default onSendEmail = (transactions) => {
-  var path = RNFS.DocumentDirectoryPath + '/transactions.csv'
-  var fileContent = createCsvContent(transactions)
-  RNFS.writeFile(path, fileContent, 'utf8')
+  let path = RNFS.DocumentDirectoryPath + '/transactions.csv'
+  RNFS.writeFile(path, createFileContent(transactions) , 'utf8')
     .then((success) => {
       this.handleEmail(path)
     })
