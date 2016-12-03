@@ -2,7 +2,7 @@ import React from 'react'
 import { AlertIOS } from 'react-native'
 import moment from 'moment'
 var Mailer = require('NativeModules').RNMail
-var RNFS = require('react-native-fs')
+// var RNFS = require('react-native-fs')
 
 createCsvContent = (transactions) => {
   let fileContent = 'Category, Amount, Date, Type, Notes'+'\n'
