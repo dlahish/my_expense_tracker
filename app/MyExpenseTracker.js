@@ -14,8 +14,8 @@ export default class MyExpenseTracker extends Component {
       <View style={styles.container}>
         <StatusBar
           translucent={true}
-          backgroundColor="rgba(0, 0, 0, 0.2)"
-          barStyle="default"
+          backgroundColor="rgba(200, 0, 0, 0.2)"
+          barStyle="dark-content"
         />
         <MetNavigator />
       </View>
@@ -25,6 +25,6 @@ export default class MyExpenseTracker extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   }
 })

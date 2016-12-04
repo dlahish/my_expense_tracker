@@ -3,8 +3,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, Navigator } from 'react-native'
 import MetTabView from './tabs/MetTabView'
+import { connect } from 'react-redux'
 
-export default class MetNavigator extends Component {
+class MetNavigator extends Component {
   constructor() {
     super()
     this.state = {
@@ -13,7 +14,7 @@ export default class MetNavigator extends Component {
   }
 
   renderScene(route, navigator) {
-    return <MetTabView navigator={navigator} tab='Home'/>
+    return <MetTabView navigator={navigator} />
   }
 
   render() {
@@ -31,6 +32,14 @@ export default class MetNavigator extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'black'
   }
 })
+
+function select(store) {
+  return {
+    tab: store.navigation.tab
+  }
+}
+
+export default connect(select)(MetNavigator)
