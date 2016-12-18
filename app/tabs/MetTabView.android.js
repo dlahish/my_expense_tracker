@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import MetDrawerLayout from '../MetComponents/MetDrawerLayout'
 import MenuItem from './MenuItem'
-import { Home, Settings } from '../components'
+import { Home, Settings, Transactions } from '../components'
 import { connect } from 'react-redux'
 import { switchTab } from '../actions/navigation'
 
@@ -39,6 +39,13 @@ class MetTabView extends Component {
           // icon={scheduleIcon}
           // selectedIcon={scheduleIconSelected}
         />
+        <MenuItem
+          title="Transactions"
+          selected={this.props.tab === 'transactions'}
+          onPress={this.onTabSelect.bind(this, 'transactions')}
+          // icon={scheduleIcon}
+          // selectedIcon={scheduleIconSelected}
+        />
       </View>
     )
   }
@@ -49,6 +56,8 @@ class MetTabView extends Component {
         return <Home />
       case 'settings':
         return <Settings />
+      case 'transactions':
+        return <Transactions />
     }
     throw new Error(`Unknown tab ${this.props.tab}`)
   }

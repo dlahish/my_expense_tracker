@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 import I18n from 'react-native-i18n'
-import SearchBar from 'react-native-search-bar'
+// import SearchBar from 'react-native-search-bar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {
   ItemRow,
