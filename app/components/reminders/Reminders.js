@@ -113,17 +113,16 @@ class Reminders extends Component {
                   </ActionButton>
                 : <ActionButton buttonColor="rgba(231,76,60,1)" offsetY={40} offsetX={15}>
                     <ActionButton.Item
-                      buttonColor='#9b59b6'
-                      title="Clear all completed reminders"
-                      onPress={() => this.onClearCompletedPress()}>
-                      <Icon name="md-warning" style={[styles.actionButtonIcon, {fontSize: 20}]}/>
-                    </ActionButton.Item>
-
-                    <ActionButton.Item
                       buttonColor='#1abc9c'
                       title="Active reminders"
                       onPress={() => this.setRemindersFilter('active')}>
                       <Icon name="md-list" style={[styles.actionButtonIcon, {fontSize: 20}]}/>
+                    </ActionButton.Item>
+                    <ActionButton.Item
+                      buttonColor='red'
+                      title="Clear all completed reminders"
+                      onPress={() => this.onClearCompletedPress()}>
+                      <Icon name="md-warning" style={[styles.actionButtonIcon, {fontSize: 20}]}/>
                     </ActionButton.Item>
                   </ActionButton>
                 }
