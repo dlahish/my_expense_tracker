@@ -6,10 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Actions } from 'react-native-router-flux'
 import {
-  GuestActions,
-  NewTransaction,
   CurrentMonthTotal,
-  addBorder,
   AddTransactionButtons,
   ChangeMonthArrows,
   DisplayFavoriteTransactions,
