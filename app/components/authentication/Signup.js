@@ -8,7 +8,8 @@ import {
   Image,
 	Dimensions,
 	TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
@@ -65,6 +66,7 @@ class Signin extends Component {
   }
 
   render() {
+    const inputFieldHeight = Platform.OS === 'ios' ? {height: 20} : {height: 35}
     return (
         <View style={styles.container}>
             <ScrollView keyboardShouldPersistTaps={true}>
@@ -78,7 +80,7 @@ class Signin extends Component {
                     <View style={styles.inputContainer}>
                         <Icon name='md-person' size={22} color='#FFF' style={styles.inputUsername}/>
                         <TextInput
-                            style={[styles.input, styles.whiteFont]}
+                            style={[styles.input, styles.whiteFont, inputFieldHeight]}
                             placeholder="Email"
                             placeholderTextColor="#FFF"
                             value={this.state.email}
@@ -94,7 +96,7 @@ class Signin extends Component {
                         <TextInput
                             ref='passwordInput'
                             password={true}
-                            style={[styles.input, styles.whiteFont]}
+                            style={[styles.input, styles.whiteFont, inputFieldHeight]}
                             placeholder="Pasword"
                             placeholderTextColor="#FFF"
                             value={this.state.password}
@@ -109,7 +111,7 @@ class Signin extends Component {
                         <TextInput
                             ref='passwordInputConfirm'
                             password={true}
-                            style={[styles.input, styles.whiteFont]}
+                            style={[styles.input, styles.whiteFont, inputFieldHeight]}
                             placeholder="Pasword confirm"
                             placeholderTextColor="#FFF"
                             value={this.state.passwordConfirm}
