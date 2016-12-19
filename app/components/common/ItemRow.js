@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { View, Text, ScrollView, TouchableHighlight, LayoutAnimation } from 'react-native'
-import Button from 'react-native-button'
+// import Button from 'react-native-button'
+import Button from './Button'
 import Icon from 'react-native-vector-icons/Ionicons'
 const editIcon = (<Icon name='ios-remove-circle' size={22} color='red' />)
 const plusIconBlack = (<Icon name='md-add' size={22} color='#CCC' />)
-import { addBorder } from '../../components'
 import CheckBox from 'react-native-checkbox'
 
 export default class ItemRow extends Component {
