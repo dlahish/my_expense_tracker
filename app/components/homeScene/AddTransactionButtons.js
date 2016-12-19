@@ -7,7 +7,8 @@ import { Actions } from 'react-native-router-flux'
 export default AddTransactionButtons = (props) => {
   handleButtonPress = (categoryType) => {
     props.setCategoryType(categoryType)
-    Actions.newTransaction()
+    // Actions.newTransaction()
+    Actions.home()
   }
 
   return (

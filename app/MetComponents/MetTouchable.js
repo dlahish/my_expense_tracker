@@ -19,6 +19,6 @@ function MetTouchableIOS(props) {
 
 const MetTouchable = Platform.OS === 'android'
   ? TouchableNativeFeedback
-  : F8TouchableIOS
+  : MetTouchableIOS
 
 module.exports = MetTouchable

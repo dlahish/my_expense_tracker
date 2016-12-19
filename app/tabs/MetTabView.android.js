@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import MetDrawerLayout from '../MetComponents/MetDrawerLayout'
 import MenuItem from './MenuItem'
-import { Home, Settings, Transactions } from '../components'
+import { Home, Settings } from '../components'
+import Transactions from '../components/transactions/Transactions.android.js'
 import { connect } from 'react-redux'
 import { switchTab } from '../actions/navigation'
 
@@ -25,6 +26,7 @@ class MetTabView extends Component {
   renderNavigationView() {
     return (
       <View style={styles.drawer}>
+        <View style={styles.header} />
         <MenuItem
           title="Home"
           selected={this.props.tab === 'home'}
@@ -81,6 +83,10 @@ const styles = StyleSheet.create({
   drawer: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  header: {
+    padding: 20,
+    justifyContent: 'flex-end',
   },
   content: {
     flex: 1

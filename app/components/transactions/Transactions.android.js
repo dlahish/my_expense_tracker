@@ -215,7 +215,8 @@ const styles = {
   container: {
     flex: 1,
     paddingTop: 64,
-    paddingBottom: 50
+    paddingBottom: 50,
+    backgroundColor: '#FFF'
   },
   transactionRow: {
     borderBottomColor: 'gray',

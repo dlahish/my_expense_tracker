@@ -20,9 +20,11 @@ export default MonthHeader = (props) =>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.monthText}>
-        {props.currentMonthName}
-      </Text>
+      <View style={{width: 85}}>
+        <Text style={styles.monthText}>
+          {props.currentMonthName}
+        </Text>
+      </View>
 
       <View style={{paddingLeft: 15, justifyContent: 'center'}}>
         <TouchableOpacity onPress={() => props.onPressRight()} style={{paddingHorizontal: 5}}>
