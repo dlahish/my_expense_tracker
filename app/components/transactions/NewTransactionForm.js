@@ -65,6 +65,7 @@ class NewTransactionForm extends Component {
                     clearButtonMode='while-editing'
                     value={amount}
                     image={getIcon('ios-cash')}
+                    inline={true}
                   />
                   <RowWidgetWithTitle
                     title='Category'

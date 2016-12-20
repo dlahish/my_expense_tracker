@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { View, Text, ScrollView, TouchableHighlight } from 'react-native'
 import Modal from 'react-native-modalbox'
-import Slider from 'react-native-slider'
+// import Slider from 'react-native-slider'
 import Button from 'react-native-button'
 
 export default class MenuModal extends Component {

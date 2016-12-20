@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { View, Text, ScrollView, TouchableHighlight } from 'react-native'
+import { View, Text, ScrollView, TouchableHighlight, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 import I18n from 'react-native-i18n'
@@ -23,6 +23,7 @@ import {
   setAmountColor,
   setMainText,
   getSymbol } from '../../functions/transactionsScene'
+import AppScrollView from '../common/AppScrollView'
 
 class Transactions extends Component {
   constructor(props) {
@@ -120,16 +121,17 @@ class Transactions extends Component {
           <ScrollView ref='_scrollView'>
 
               <View style={{backgroundColor: '#c8c7cc'}}>
-                  <SearchBar
-                    ref='searchBar'
-                    placeholder='Search Category, Amount or Notes'
-                    text={p.searchTransactionsValue}
-                    onChangeText={(value) => this.setState({searchValue: value})}
-                    onSearchButtonPress={() => this.refs.searchBar.unFocus() }
-                    onCancelButtonPress={() => {
-                      this.setState({searchValue: ''})
-                      this.refs._scrollView.scrollTo({y: this.state.scrollY})}}
-                    showsCancelButton={true}/>
+                  {Platform.OS === 'ios' ?
+                    <SearchBar
+                      ref='searchBar'
+                      placeholder='Search Category, Amount or Notes'
+                      text={p.searchTransactionsValue}
+                      onChangeText={(value) => this.setState({searchValue: value})}
+                      onSearchButtonPress={() => this.refs.searchBar.unFocus() }
+                      onCancelButtonPress={() => {
+                        this.setState({searchValue: ''})
+                        this.refs._scrollView.scrollTo({y: this.state.scrollY})}}
+                      showsCancelButton={true}/> : null}
 
                   <View style={{alignItems: 'center', justifyContent: 'center'}}>{upArrow}</View>
 
