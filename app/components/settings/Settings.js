@@ -25,10 +25,11 @@ class Settings extends Component {
   }
 
   onSyncPress = () => {
-    if (!this.props.synced) {
-      this.setModalVisible(true, 'Data synced with the server')
-      this.props.actions.settings.syncData()
-    } else { this.setModalVisible(true, 'Data already synced') }
+    this.props.actions.settings.syncData()
+    // if (!this.props.synced) {
+    //   this.setModalVisible(true, 'Data synced with the server')
+    //   this.props.actions.settings.syncData()
+    // } else { this.setModalVisible(true, 'Data already synced') }
   }
 
   setModalVisible = (visible, text) => {
