@@ -1,9 +1,7 @@
 import Rx from 'rxjs/Rx'
 import { Observable } from 'rxjs/Observable'
-import {
-  SYNC_DATA
-} from '../constants'
-import { failedSync, updateSyncedTransactions } from '../actions/settings'
+import { SYNC_DATA } from '../constants'
+import { failedSync, updateSyncedTransactions, anotherAction } from '../actions/settings'
 import { updateCollection } from '../api/data'
 
 function prepareDataForServer(state) {
@@ -25,9 +23,16 @@ function prepareDataForServer(state) {
 
 export default function settings(action$, store) {
   return action$.ofType(SYNC_DATA)
-    .map(() => Rx.Observable.of(prepareDataForServer(store.getState())))
-    .mergeMap((x) => Rx.Observable.fromPromise(updateCollection(x.value, store.getState().account.token)))
-    .map(t => updateSyncedTransactions(t.data.transactions))
-    .catch(x => Rx.Observable.of(x)
+    .map(() => Observable.of(prepareDataForServer(store.getState())))
+    .mergeMap((x) => updateCollection(x.value, store.getState().account.token))
+    .map(res => res.data.transactions)
+    .flatMap(t =>
+      Observable.concat(
+        Observable.of(updateSyncedTransactions(t)),
+        Observable.of(anotherAction())
+      )
+    )
+    // .map(updateSyncedTransactions)
+    .catch(x => Observable.of(x)
       .map(failedSync))
 }
