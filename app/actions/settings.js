@@ -17,30 +17,6 @@ export function syncData() { return { type: SYNC_DATA } }
 
 export function failedSync() { return { type: SYNC_FAILED } }
 
-// export function syncData() {
-//   return function(dispatch, getState) {
-//     const state = getState()
-//     const token = state.account.token,
-//           data = state.transactions.transactions
-//     let dataToServer = []
-//     data.forEach((d) => {
-//       let tempData = {
-//         date: d.date,
-//         category: d.category,
-//         amount: d.amount,
-//         notes: d.notes,
-//         type: d.type
-//       }
-//       dataToServer.push(tempData)
-//     })
-//     updateCollection(dataToServer, token)
-//       .then((res) => {
-//         dispatch(updateSyncedTransactions(res.data.transactions))
-//       })
-//       .catch((err)=> console.log('error', err))
-//   }
-// }
-
 export function setCurrancySymbol(symbol) {
   return {
     type: SET_CURRENCY_SYMBOL,

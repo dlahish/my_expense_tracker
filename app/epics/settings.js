@@ -9,8 +9,6 @@ import { updateCollection } from '../api/data'
 function prepareDataForServer(state) {
   const token = state.account.token,
         transactions = state.transactions.transactions
-        console.log('transactions', transactions)
-  console.log('prepareDataForServer ----', transactions)
   let dataToServer = []
   transactions.forEach((d) => {
     let transaction = {
@@ -26,18 +24,10 @@ function prepareDataForServer(state) {
 }
 
 export default function settings(action$, store) {
-  const state = store.getState()
-  const token = state.account.token
   return action$.ofType(SYNC_DATA)
-    .delay(2000)
-    .mapTo(prepareDataForServer(store.getState()))
-    .mergeMap(x => Rx.Observable.fromPromise(updateCollection(x, token))
-      .do((x) => console.log('data to server ', x))
-      .map(res => res.data.transactions)
-      .map(updateSyncedTransactions)
-      .catch(failedSync))
-
-
-
-    // .takeUntil(Rx.Observable.of({type : 'FAILED'}))
+    .map(() => Rx.Observable.of(prepareDataForServer(store.getState())))
+    .mergeMap((x) => Rx.Observable.fromPromise(updateCollection(x.value, store.getState().account.token)))
+    .map(t => updateSyncedTransactions(t.data.transactions))
+    .catch(x => Rx.Observable.of(x)
+      .map(failedSync))
 }

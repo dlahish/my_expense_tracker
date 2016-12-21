@@ -2,7 +2,6 @@ import axios from 'axios'
 const BASE_URI = `https://spendingapi2.herokuapp.com`
 
 export function updateCollection(transactions, token) {
-  console.log('update collection', transactions, token)
   if (token === null) return {}
   return axios({
     url: `${BASE_URI}/updatecollection`,
