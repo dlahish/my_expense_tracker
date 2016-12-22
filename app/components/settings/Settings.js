@@ -25,11 +25,10 @@ class Settings extends Component {
   }
 
   onSyncPress = () => {
-    this.props.actions.settings.syncData()
-    // if (!this.props.synced) {
-    //   this.setModalVisible(true, 'Data synced with the server')
-    //   this.props.actions.settings.syncData()
-    // } else { this.setModalVisible(true, 'Data already synced') }
+    if (!this.props.synced) {
+      this.setModalVisible(true, 'Data synced with the server')
+      this.props.actions.settings.syncData()
+    } else { this.setModalVisible(true, 'Data already synced') }
   }
 
   setModalVisible = (visible, text) => {
@@ -37,7 +36,7 @@ class Settings extends Component {
   }
 
   render() {
-    var bgColor = '#DCE3F4'
+    const bgColor = '#DCE3F4'
     return (
       <View style={{backgroundColor:'#EFEFF4',flex:1, paddingTop: 64, paddingBottom: 50}}>
         <View style={{backgroundColor:'#EFEFF4',flex:1}}>

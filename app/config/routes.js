@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, NetInfo } from 'react-native'
 import { Router, Scene, Switch, Actions, ActionConst } from 'react-native-router-flux'
 import { bindActionCreators } from 'redux'
 import * as accountActions from '../actions/accounts'
 import * as dataActions from '../actions/data'
 import * as settingsActions from '../actions/settings'
+import changeConnectionStatus from '../actions/isConnected'
 import { fetchIfCurrentUser } from '../actions/accounts'
 import Button from 'react-native-button'
 import { connect } from 'react-redux'
@@ -36,7 +37,30 @@ class Routes extends Component {
   componentDidMount() {
     this.props.actions.account.checkIfAuthed()
     this.props.actions.data.setCurrentMonth()
+    NetInfo.isConnected.addEventListener(
+        'change',
+        this._handleConnectivityChange.bind(this)
+    )
+    NetInfo.isConnected.fetch().done(
+        (isConnected) => { this.props.actions.changeConnectionStatus(isConnected) }
+    )
   }
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+        'change',
+        this._handleConnectivityChange
+    )
+  }
+
+  _handleConnectivityChange(isConnected) {
+    this.props.actions.changeConnectionStatus(isConnected)
+  }
+
+  // componentDidMount() {
+  //   this.props.actions.account.checkIfAuthed()
+  //   this.props.actions.data.setCurrentMonth()
+  // }
 
   render() {
     return (
@@ -189,20 +213,19 @@ class Routes extends Component {
 export default connect(
   (state) => ({
     token: state.account.token,
-    loading: !state.storage.storageLoaded
+    loading: !state.storage.storageLoaded,
+    isConnected: state.isConnected
   }),
   (dispatch) => ({
     actions: {
       account: bindActionCreators(accountActions, dispatch),
       data: bindActionCreators(dataActions, dispatch),
-      settings: bindActionCreators(settingsActions, dispatch)
+      settings: bindActionCreators(settingsActions, dispatch),
+      changeConnectionStatus: (isConnected) => dispatch(changeConnectionStatus(isConnected))
     }
   }))(Routes)
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent', justifyContent: 'center',
-    alignItems: 'center',
-  },
   navBar: {
     backgroundColor: '#rgb(0, 153, 204)',
   },

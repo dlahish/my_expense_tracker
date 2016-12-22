@@ -77,7 +77,9 @@ var styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 20
+    padding: 20,
+    flexDirection: 'column',
+    height: 100
   },
   modalButton: {
     marginTop: 10,

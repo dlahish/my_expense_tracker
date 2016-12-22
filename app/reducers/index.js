@@ -8,6 +8,7 @@ import storage from './storage'
 import reminders from './reminders'
 import categories from './categories'
 import transactions from './transactions'
+import isConnected from './isConnected'
 
 export default combineReducers({
   account,
@@ -18,5 +19,6 @@ export default combineReducers({
   settings,
   reminders,
   categories,
-  transactions
+  transactions,
+  isConnected
 })

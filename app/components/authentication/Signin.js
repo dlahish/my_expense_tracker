@@ -26,22 +26,33 @@ class Signin extends Component {
     this.state = {
       email: '',
       password: '',
-			isLoading: false
+			isLoading: false,
+      connectionMessage: ''
+    }
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.isConnected) {
+      this.setState({ connectionMessage: '' })
     }
   }
 
 	onFormSubmit = () => {
-		this.setState({ isLoading: true })
-		this.props.signinAndAuthUser(this.state)
-			.then(() => {
-				if (!this.props.authError) {
-					this.setState({ isLoading: false })
-					Actions.home()
-				} else {
-					this.setState({ isLoading: false })
-				}
-			})
-    this.setState({ password: '' })
+    if (this.props.isConnected) {
+      this.setState({ isLoading: true })
+  		this.props.signinAndAuthUser(this.state)
+  			.then(() => {
+  				if (!this.props.authError) {
+  					this.setState({ isLoading: false, connectionMessage: '' })
+  					Actions.home()
+  				} else {
+  					this.setState({ isLoading: false })
+  				}
+  			})
+      this.setState({ password: '' })
+    } else {
+      this.setState({ connectionMessage: 'Please connect to the internet' })
+    }
   }
 
   onInputChange = (field, value) => {
@@ -58,6 +69,7 @@ class Signin extends Component {
 
   render() {
     const inputFieldHeight = Platform.OS === 'ios' ? {height: 20} : {height: 35}
+    const error = this.state.connectionMessage || this.props.authError
     return (
         <View style={styles.container}>
             <ScrollView keyboardShouldPersistTaps={true}>
@@ -95,7 +107,7 @@ class Signin extends Component {
                         />
                     </View>
                     <View style={styles.forgotContainer}>
-                        <Text style={{color: 'red'}}>{this.props.authError}</Text>
+                        <Text style={{color: 'red'}}>{error}</Text>
                         {/* <Text style={styles.greyFont}>Forgot Password</Text> */}
                     </View>
                 </View>
@@ -117,7 +129,9 @@ class Signin extends Component {
 }
 
 export default connect(
-	(state) => ({ authError: state.account.authError }),
+	(state) => ({
+    authError: state.account.authError,
+    isConnected: state.isConnected }),
 	(dispatch) => (bindActionCreators(accountActions, dispatch))
 )(Signin)
 
