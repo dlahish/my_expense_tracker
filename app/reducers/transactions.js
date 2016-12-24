@@ -28,12 +28,14 @@ export default function transactions (state = initialState, action) {
       state.transactions.every((transaction, i) => {
           if (transaction.id === undefined) {
               if (transaction._id === action.transaction._id) {
-                nextTransactions = [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
+                nextTransactions =
+                  [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
                 return false
               } else { return true }
           } else {
               if (transaction.id === action.transaction.id) {
-                nextTransactions = [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
+                nextTransactions =
+                  [...state.transactions.slice(0, i), ...state.transactions.slice(i + 1)]
                 return false
               } else { return true }
           }

@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable'
 import { SYNC_DATA } from '../constants'
 import { updateSyncedTransactions, changeSyncStatus } from '../actions/settings'
 import { updateCollection } from '../api/data'
+import { getTransactions } from '../actions/data'
+import { forcedNewProps } from '../actions/categories'
 
 function prepareDataForServer(state) {
   const token = state.account.token,
@@ -23,14 +25,15 @@ function prepareDataForServer(state) {
 
 export default function settings(action$, store) {
   return action$.ofType(SYNC_DATA)
-    .do(() => console.log('Hello from Sync Data Epic'))
     .map(() => Observable.of(prepareDataForServer(store.getState())))
     .mergeMap((x) => updateCollection(x.value, store.getState().account.token))
     .map(res => res.data.transactions)
     .flatMap(t =>
       Observable.concat(
         Observable.of(updateSyncedTransactions(t)),
-        Observable.of(changeSyncStatus(true))
+        Observable.of(changeSyncStatus(true)),
+        Observable.of(getTransactions('2016', store.getState().account.token)),
+        Observable.of(forcedNewProps())
       )
     )
     .catch(x => Observable.of(x)

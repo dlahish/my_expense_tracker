@@ -103,7 +103,6 @@ class NewTransaction extends Component {
               type: this.state.categoryType
             }
             if (this.props.title === 'New Transaction') {
-              console.log('on save new transaction', transaction)
               if (!this.props.editMode || this.props.customFavorites) {
                 this.props.actions.transactions.addNewTransaction(transaction)
                 this.setState({isLoading: true})
