@@ -3,8 +3,7 @@ import {
   SET_CUSTOM_FAVORITES,
   SET_FETCHED_TRANSACTIONS,
   SYNC_DATA,
-  SYNC_FAILED,
-  ANOTHER_ACTION } from '../constants'
+  CHANGE_SYNC_STATUS } from '../constants'
 import { updateCollection } from '../api/data'
 
 export function updateSyncedTransactions(transactions) {
@@ -16,9 +15,7 @@ export function updateSyncedTransactions(transactions) {
 
 export function syncData() { return { type: SYNC_DATA } }
 
-export function failedSync() { return { type: SYNC_FAILED } }
-
-export function anotherAction() { return { type: ANOTHER_ACTION } }
+export function changeSyncStatus(status) { return { type: CHANGE_SYNC_STATUS, isSyncSuccessful: status}}
 
 export function setCurrancySymbol(symbol) {
   return {

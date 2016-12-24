@@ -35,7 +35,8 @@ export default class MessageModal extends Component {
       </View>
     } else {
       return <Button
-        onPress={this.props.setModalVisible.bind(this, false)}
+        // onPress={this.props.setModalVisible.bind(this, false)}
+        onPress={() => this.props.setModalVisible(false)}
         style={styles.modalButton}>
         Close
       </Button>

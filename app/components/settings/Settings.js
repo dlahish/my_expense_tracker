@@ -24,9 +24,22 @@ class Settings extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.sceneIndex === 3 && nextProps.sceneIndex === 3) {
+      if (nextProps.isSyncSuccessful === 'syncing') {
+        return this.setModalVisible(true, 'Syncing....')
+      }
+      if (this.props.isSyncSuccessful !== nextProps.isSyncSuccessful && nextProps.isSyncSuccessful) {
+        this.setModalVisible(true, 'Sync completed')
+      } else {
+        this.setModalVisible(true, 'Sync failed')
+      }
+    }
+  }
+
   onSyncPress = () => {
     if (!this.props.synced) {
-      this.setModalVisible(true, 'Data synced with the server')
+      this.setModalVisible(true, 'Syncing....')
       this.props.actions.settings.syncData()
     } else { this.setModalVisible(true, 'Data already synced') }
   }
@@ -79,7 +92,7 @@ class Settings extends Component {
         </View>
 
         <MessageModal
-          setModalVisible={this.setModalVisible}
+          setModalVisible={this.setModalVisible.bind(this)}
           modalVisible={this.state.modalVisible}
           text={this.state.modaltext}
         />
@@ -98,7 +111,9 @@ export default connect(
   (state) => ({
     currencySymbol: state.settings.currencySymbol,
     customFavorites: state.settings.customFavorites,
-    synced: state.transactions.synced }),
+    isSyncSuccessful: state.settings.isSyncSuccessful,
+    synced: state.transactions.synced,
+    sceneIndex: state.routes.scene.index }),
   (dispatch) => ({
     actions: {
       settings: bindActionCreators(settingsActionCreators, dispatch),
