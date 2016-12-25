@@ -26,16 +26,16 @@ function prepareDataForServer(state) {
 export default function settings(action$, store) {
   return action$.ofType(SYNC_DATA)
     .map(() => Observable.of(prepareDataForServer(store.getState())))
-    .mergeMap((x) => updateCollection(x.value, store.getState().account.token))
-    .map(res => res.data.transactions)
-    .flatMap(t =>
-      Observable.concat(
-        Observable.of(updateSyncedTransactions(t)),
-        Observable.of(changeSyncStatus(true)),
-        Observable.of(getTransactions('2016', store.getState().account.token)),
-        Observable.of(forcedNewProps())
+    .flatMap((x) => Observable.fromPromise(updateCollection(x.value, store.getState().account.token))
+      .map(res => res.data.transactions)
+      .flatMap(transactions =>
+        Observable.concat(
+          Observable.of(updateSyncedTransactions(transactions)),
+          Observable.of(changeSyncStatus(true)),
+          Observable.of(getTransactions(new Date().getFullYear(), store.getState().account.token)),
+          Observable.of(forcedNewProps())
+        )
       )
+      .catch(error => Observable.of(changeSyncStatus(false)))
     )
-    .catch(x => Observable.of(x)
-      .flatMap(() => Observable.of(changeSyncStatus(false))))
 }

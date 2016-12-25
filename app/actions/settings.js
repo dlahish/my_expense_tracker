@@ -15,7 +15,12 @@ export function updateSyncedTransactions(transactions) {
 
 export function syncData() { return { type: SYNC_DATA } }
 
-export function changeSyncStatus(status) { return { type: CHANGE_SYNC_STATUS, isSyncSuccessful: status}}
+export function changeSyncStatus(status) {
+  return {
+    type: CHANGE_SYNC_STATUS,
+    isSyncSuccessful: status
+  }
+}
 
 export function setCurrancySymbol(symbol) {
   return {

@@ -25,11 +25,12 @@ class Settings extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.sceneIndex === 3 && nextProps.sceneIndex === 3) {
+    if (this.props.sceneName === 'settings' && nextProps.sceneName === 'settings' ||
+        this.props.sceneIndex === 3 && nextProps.sceneIndex === 3) {
       if (nextProps.isSyncSuccessful === 'syncing') {
-        return this.setModalVisible(true, 'Syncing....')
+        return this.setModalVisible(true, 'Syncing...')
       }
-      if (this.props.isSyncSuccessful !== nextProps.isSyncSuccessful && nextProps.isSyncSuccessful) {
+      if (nextProps.isSyncSuccessful) {
         this.setModalVisible(true, 'Sync completed')
       } else {
         this.setModalVisible(true, 'Sync failed')
@@ -39,7 +40,7 @@ class Settings extends Component {
 
   onSyncPress = () => {
     if (!this.props.synced) {
-      this.setModalVisible(true, 'Syncing....')
+      this.setModalVisible(true, 'Syncing...')
       this.props.actions.settings.syncData()
     } else { this.setModalVisible(true, 'Data already synced') }
   }
@@ -113,7 +114,8 @@ export default connect(
     customFavorites: state.settings.customFavorites,
     isSyncSuccessful: state.settings.isSyncSuccessful,
     synced: state.transactions.synced,
-    sceneIndex: state.routes.scene.index }),
+    sceneIndex: state.routes.scene.index,
+    sceneName: state.routes.scene.name }),
   (dispatch) => ({
     actions: {
       settings: bindActionCreators(settingsActionCreators, dispatch),
