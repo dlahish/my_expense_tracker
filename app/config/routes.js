@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import * as accountActions from '../actions/accounts'
 import * as dataActions from '../actions/data'
 import * as settingsActions from '../actions/settings'
-import changeConnectionStatus from '../actions/isConnected'
+import changeConnectionStatus from '../actions/connection'
 import { fetchIfCurrentUser } from '../actions/accounts'
 import Button from 'react-native-button'
 import { connect } from 'react-redux'
@@ -56,11 +56,6 @@ class Routes extends Component {
   _handleConnectivityChange(isConnected) {
     this.props.actions.changeConnectionStatus(isConnected)
   }
-
-  // componentDidMount() {
-  //   this.props.actions.account.checkIfAuthed()
-  //   this.props.actions.data.setCurrentMonth()
-  // }
 
   render() {
     return (
